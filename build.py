@@ -25,7 +25,7 @@ TYPE_BLURB = {
     "Utility": "Work and two-up sleds: wide tracks, reverse, towing and hauling.",
     "Vintage": "Older sleds still running on traplines, ice and back trails.",
 }
-NUM = {"year": int, "cc": int, "cylinders": int, "hp": float, "dry_weight_lb": float,
+NUM = {"year": int, "cc": float, "cylinders": int, "hp": float, "dry_weight_lb": float,
        "track_length_in": float, "track_width_in": float, "lug_in": float, "fuel_gal": float,
        "length_in": float, "sprocket_pitch_in": float, "msrp_usd": float}
 
@@ -41,6 +41,14 @@ def n(v):
     if v is None:
         return None
     return str(int(v)) if float(v).is_integer() else str(v)
+
+
+def hp_gap(s, long=False):
+    """Wording for a missing horsepower figure. Modern Polaris/Yamaha genuinely don't publish it;
+    for older sleds we only know our source doesn't list it."""
+    if s["year"] >= 2010 and s["brand"] in ("Polaris", "Yamaha"):
+        return f"Not published by {s['brand']}" if long else "Not published"
+    return "Not in our source" if long else "Not listed"
 
 
 def mailto(subject):
@@ -86,6 +94,8 @@ def track_text(s):
         return None
     if parts[1] and parts[2]:
         return f"{parts[0]} × {parts[1]} × {parts[2]} in"
+    if parts[1]:
+        return f"{parts[0]} × {parts[1]} in"
     return f"{parts[0]} in"
 
 
@@ -195,7 +205,7 @@ def crumbs(items):
 def cat_table(sleds, caption, filters=True, table_id="cat"):
     rows = []
     for s in sleds:
-        hp = f'{n(s["hp"])} hp' if s["hp"] else '<span class="np">Not published</span>'
+        hp = f'{n(s["hp"])} hp' if s["hp"] else f'<span class="np">{hp_gap(s)}</span>'
         search = " ".join(str(x) for x in [s["full"], s["category"], s["engine"] or "", s["cc"] or "",
                                            n(s["track_length_in"]) or "", s["belt_pn"] or ""]).lower()
         rows.append(f"""<tr data-brand="{e(s['brand'])}" data-type="{e(s['category'])}" data-year="{s['year']}" data-cc="{s['cc'] or 0}" data-hp="{s['hp'] or 0}" data-weight="{s['dry_weight_lb'] or 0}" data-track="{s['track_length_in'] or 0}" data-lbhp="{s['lb_per_hp'] or 0}" data-search="{e(search)}">
@@ -370,19 +380,19 @@ def model_page(s, sleds):
     def row(k, v):
         return f"<tr><th scope=row>{k}</th><td>{v}</td></tr>" if v not in (None, "", "—") else ""
     hp = f"{n(s['hp'])} hp" if s["hp"] else None
-    missing = [label for label, v in [("horsepower", s["hp"] or (s["brand"] in ("Polaris", "Yamaha"))),
+    missing = [label for label, v in [("horsepower", s["hp"] or hp_gap(s) == "Not published"),
                                       ("dry weight", s["dry_weight_lb"]), ("track size", s["track"]),
                                       ("fuel capacity", s["fuel_gal"]), ("drive belt part number", s["belt_pn"]),
                                       ("clutching", s["clutch"]), ("overall length", s["length_in"])] if not v]
     plate = "".join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in [
         ("Engine", f"{n(s['cc'])} cc"),
-        ("Power", hp or "Not published"),
+        ("Power", hp or hp_gap(s)),
         ("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else "—"),
         ("Track", f"{n(s['track_length_in'])} in" if s["track_length_in"] else "—"),
     ])
     engine = (row("Engine", e(s["engine"])) + row("Type", e(s["engine_detail"] or "")) +
               row("Displacement", f"{n(s['cc'])} cc") + row("Cylinders", n(s["cylinders"])) +
-              row("Horsepower", hp or ("Not published by " + e(s["brand"]))) +
+              row("Horsepower", hp or hp_gap(s, long=True)) +
               row("Power-to-weight", f"{s['lb_per_hp']} lb per hp" if s["lb_per_hp"] else None))
     drive = (row("Track", e(s["track"]) if s["track"] else None) + row("Track model", e(s["track_name"]) if s["track_name"] else None) +
              row("Drive belt", f'<b class="pn">{e(s["belt_pn"])}</b>' if s["belt_pn"] else None) +
@@ -414,7 +424,8 @@ def model_page(s, sleds):
     nm = f"{s['year']} {s['brand']} {s['model']}"
     qas = [(f"How much horsepower does the {nm} have?",
             f"The {nm} makes {n(s['hp'])} hp from its {e(s['engine'])} ({n(s['cc'])} cc)." if s["hp"] else
-            f"{e(s['brand'])} doesn't publish a horsepower figure for the {nm}. It uses the {e(s['engine'])}, {n(s['cc'])} cc.")]
+            (f"{e(s['brand'])} doesn't publish a horsepower figure for the {nm}." if hp_gap(s) == "Not published"
+             else f"Our source for the {nm} doesn't list horsepower.") + f" It uses the {e(s['engine'])}, {n(s['cc'])} cc.")]
     if s["dry_weight_lb"]:
         qas.append((f"How much does the {nm} weigh?", f"The factory dry weight is {n(s['dry_weight_lb'])} lb, without fuel or oil."))
     if s["track"]:
