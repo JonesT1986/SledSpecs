@@ -446,8 +446,8 @@ def model_page(s, sleds):
     c_html, c_ld = crumbs([("Home", "/"), ("Snowmobiles", "/snowmobiles/"), (s["brand"], f"/snowmobiles/{s['brand_slug']}/"), (f"{s['year']} {s['model']}", s["url"])])
     src = (f"<p><b>Source:</b> {e(s['source'])}. Checked {e(s['checked'] or '')}.</p>" if s["source"]
            else "<p><b>Source:</b> being confirmed.</p>")
-    gaps = (f"<p>Not on file yet for this sled: {', '.join(missing)}. "
-            + (f'Have the owner\'s manual? <a href="{mailto("Correction: " + nm)}">Send us the page</a>.' if CONTACT_EMAIL else "") + "</p>") if missing else ""
+    gaps = (f"<p>Not on file yet for this sled: {', '.join(missing)}."
+            + (f' Have the owner\'s manual? <a href="{mailto("Correction: " + nm)}">Send us the page</a>.' if CONTACT_EMAIL else "") + "</p>") if missing else ""
     note = f'<p class="note">{e(s["notes"])}</p>' if s["notes"] else ""
 
     body = f"""{c_html}
