@@ -66,9 +66,11 @@ def load():
         for k in list(s):
             if s[k] == "":
                 s[k] = None
-        if s["id"] in seen:
-            problems.append("duplicate id " + s["id"])
-        seen.add(s["id"])
+        key = f"{s['year']}-{s['id']}"
+        if key in seen:
+            problems.append("duplicate year+id " + key)
+        seen.add(key)
+        s["key"] = key
         if s["brand"] not in BRANDS:
             problems.append(f"{s['id']}: unknown brand {s['brand']}")
         if s["category"] not in TYPES:
@@ -215,7 +217,7 @@ def cat_table(sleds, caption, filters=True, table_id="cat"):
 <td class="wt" data-l="Dry weight">{(n(s['dry_weight_lb'])+' lb') if s['dry_weight_lb'] else '—'}</td>
 <td class="tr" data-l="Track">{e(s['track'] or '—')}</td>
 <td class="fu" data-l="Fuel">{(n(s['fuel_gal'])+' gal') if s['fuel_gal'] else '—'}</td>
-<td class="ac"><button class="btn small" type="button" data-compare="{s['id']}" aria-pressed="false">Compare</button></td>
+<td class="ac"><button class="btn small" type="button" data-compare="{s['key']}" aria-pressed="false">Compare</button></td>
 </tr>""")
     tools = ""
     if filters:
@@ -408,15 +410,19 @@ def model_page(s, sleds):
     tables = "".join(f'<table class="spec"><caption>{cap}</caption>{rows}</table>' for cap, rows in
                      [("Engine", engine), ("Track and drive", drive), ("Chassis and capacities", chassis)] if rows)
 
-    same_belt = [x for x in sleds if s["belt_pn"] and x["belt_pn"] == s["belt_pn"] and x["id"] != s["id"]]
-    related = [x for x in sleds if x["id"] != s["id"] and (x["brand"] == s["brand"] or x["category"] == s["category"])][:6]
+    same_belt = [x for x in sleds if s["belt_pn"] and x["belt_pn"] == s["belt_pn"] and x["key"] != s["key"]]
+    # similar = same brand and type, nearest model years first
+    related = sorted([x for x in sleds if x["key"] != s["key"] and x["brand"] == s["brand"] and x["category"] == s["category"]],
+                     key=lambda x: (abs(x["year"] - s["year"]), x["model"]))[:6]
+    if len(related) < 3:
+        related += [x for x in sleds if x["key"] != s["key"] and x not in related and x["category"] == s["category"]][:6 - len(related)]
     side = ""
     if s["belt_pn"]:
         side += f'<div class="fit"><h2>Drive belt</h2><p class="pn big">{e(s["belt_pn"])}</p>'
         if same_belt:
             side += "<p>Also fits:</p><ul>" + "".join(f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in same_belt) + "</ul>"
         side += '<p class="small">Confirm with your dealer before ordering.</p></div>'
-    side += f'<button class="btn go wide" type="button" data-compare="{s["id"]}" aria-pressed="false">Add to compare</button>'
+    side += f'<button class="btn go wide" type="button" data-compare="{s["key"]}" aria-pressed="false">Add to compare</button>'
     if related:
         side += '<div class="rel"><h2>Similar sleds</h2><ul>' + "".join(
             f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in related) + "</ul></div>"
@@ -576,7 +582,7 @@ def main():
     write("/about/", about_page(sleds, corrections))
     write("/404.html", notfound())
 
-    pub = [{k: s[k] for k in ("id", "full", "brand", "model", "year", "category", "engine", "cc", "hp", "dry_weight_lb",
+    pub = [{k: s[k] for k in ("key", "full", "brand", "model", "year", "category", "engine", "cc", "hp", "dry_weight_lb",
                               "track", "track_length_in", "fuel_gal", "belt_pn", "lb_per_hp", "url")} for s in sleds]
     write("/assets/sleds.json", json.dumps(pub, separators=(",", ":")))
     write("/sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +

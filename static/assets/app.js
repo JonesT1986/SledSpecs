@@ -69,7 +69,7 @@
     if (!tray || location.pathname.indexOf("/compare") === 0) return;
     if (!set.length) { tray.hidden = true; return; }
     loadData(function (d) {
-      var names = set.map(function (id) { var s = d.filter(function (x) { return x.id === id; })[0]; return s ? s.full : id; });
+      var names = set.map(function (id) { var s = d.filter(function (x) { return x.key === id; })[0]; return s ? s.full : id; });
       document.getElementById("trayNames").textContent = names.join(" vs ") + (set.length < 2 ? ". Pick one more." : "");
       var go = document.getElementById("trayGo");
       go.href = "/compare/?s=" + set.join(",");
@@ -95,7 +95,7 @@
     var ids = p ? p.split(",").slice(0, MAX) : store.get();
     if (p) store.set(ids);
     loadData(function (d) {
-      var ms = ids.map(function (id) { return d.filter(function (x) { return x.id === id; })[0]; }).filter(Boolean);
+      var ms = ids.map(function (id) { return d.filter(function (x) { return x.key === id; })[0]; }).filter(Boolean);
       if (ms.length < 2) {
         out.innerHTML = '<p>You have ' + ms.length + ' sled' + (ms.length === 1 ? "" : "s") + ' picked. <a href="/#catalogue">Go to the catalogue</a> and tap Compare on two or three sleds.</p>';
         return;
@@ -118,7 +118,7 @@
         ["Type", ms.map(function (m) { return m.category; }), -1]
       ];
       var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-      var head = ms.map(function (m) { return '<th scope="col"><a href="' + m.url + '">' + esc(m.full) + '</a><br><button class="btn small rm" type="button" data-compare="' + m.id + '">Remove</button></th>'; }).join("");
+      var head = ms.map(function (m) { return '<th scope="col"><a href="' + m.url + '">' + esc(m.full) + '</a><br><button class="btn small rm" type="button" data-compare="' + m.key + '">Remove</button></th>'; }).join("");
       var body = rows.map(function (r) {
         return "<tr><th scope=row>" + r[0] + "</th>" + r[1].map(function (v, i) { return '<td' + (i === r[2] ? ' class="best"' : "") + ">" + esc(v) + "</td>"; }).join("") + "</tr>";
       }).join("");

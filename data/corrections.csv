@@ -8,3 +8,4 @@ date,what,change
 2026-11-18,2024 Ski-Doo Summit X 850 E-TEC 165,Figure corrected on catalogue load: sprocket_pitch_in (blank) -> 3.5 (per the factory source named in the row).
 2026-11-18,2024 Ski-Doo Summit X Expert 850 E-TEC Turbo R 175,Figure corrected on catalogue load: sprocket_pitch_in (blank) -> 3.5 (per the factory source named in the row).
 2026-11-18,2024 Ski-Doo MXZ X-RS 850 E-TEC 137,Figure corrected on catalogue load: sprocket_pitch_in (blank) -> 2.86 (per the factory source named in the row).
+2026-11-18,146 Polaris models 1985-1995 added,"Engine, bore and stroke, carburetion, length, ski stance, track and fuel capacity from Polaris's own service-manual chapter 'Models and Specifications' (1985-1995). Rows where the scan was ambiguous were left out rather than guessed."
