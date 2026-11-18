@@ -73,6 +73,51 @@ def buy_link(s, cls="btn buy wide", label="Check belt price on Amazon"):
     return f'<a class="{cls}" href="{amazon_url(s)}" rel="sponsored nofollow noopener" target="_blank">{label}</a>'
 
 
+FOUR_STROKE = re.compile(r"ACE|4-TEC|Genesis|ProStar|4-stroke|four-stroke|\b(7000|9000)\b", re.I)
+SKIP_WORDS = {"patriot", "boost", "9r", "prostar", "s4", "rotax", "the"}
+OIL = {"Ski-Doo": "Ski-Doo XPS 2-stroke synthetic oil", "Polaris": "Polaris VES 2-cycle oil",
+       "Arctic Cat": "Arctic Cat C-TEC2 2-stroke oil", "Yamaha": "Yamalube 2-stroke snowmobile oil"}
+
+
+def family(s):
+    ws = s["model"].split()
+    for i, w in enumerate(ws):
+        if re.search(r"[a-z]", w, re.I) and w.lower() not in SKIP_WORDS and not re.match(r"^\d", w):
+            return " ".join(ws[i:i + 2]) if w.lower() in ("grand", "pro", "safari") and i + 1 < len(ws) else w
+    return ""
+
+
+def amz(q):
+    return f"https://www.amazon.ca/s?k={re.sub(r'\s+', '+', q.strip())}&tag={AMAZON_TAG}"
+
+
+def parts_box(s):
+    """Tagged Amazon.ca searches for the parts and supplies this sled actually uses."""
+    if not AMAZON_TAG:
+        return ""
+    br, fam, eng = s["brand"], family(s), (s["engine"] or "")
+    four = bool(FOUR_STROKE.search(eng + " " + (s["engine_detail"] or "")))
+    items = []
+    if s["year"] < 1990:
+        items += [("Parts for vintage " + br + " sleds", f"vintage {br} snowmobile parts"),
+                  (f"{br} {fam} service manual", f"{br} {fam} snowmobile manual"),
+                  ("Spark plugs", f"{br} {fam} snowmobile spark plug"),
+                  ("2-stroke injection oil", "2-stroke snowmobile injection oil"),
+                  ("Carbide runners and skags", "snowmobile carbide runners"),
+                  ("Snowmobile cover", "universal snowmobile cover")]
+    else:
+        items += [("Spark plugs", f"{br} {eng} spark plug".replace(br + " " + br, br)),
+                  ("Engine oil", f"{br} 4-stroke snowmobile oil 0W-40" if four else OIL.get(br, "2-stroke snowmobile oil")),
+                  (f"{fam} sled cover" if fam else "Sled cover", f"{br} {fam} snowmobile cover"),
+                  ("Carbide runners and wear bars", f"{br} snowmobile carbide runners"),
+                  ("Chaincase and gear oil", f"{br} snowmobile chaincase oil"),
+                  ("Track studs and backers", "snowmobile track studs backers")]
+    lis = "".join(f'<li><a href="{amz(q)}" rel="sponsored nofollow noopener" target="_blank">{e(label)}</a></li>' for label, q in items)
+    return (f'<section class="parts"><h2>Parts and supplies</h2><p class="small">Amazon.ca searches matched to the {e(s["year"])} {e(br)} {e(s["model"])}. '
+            f'Check fitment against your owner\'s manual before ordering. As an Amazon Associate, SledSpecs earns from qualifying purchases.</p>'
+            f'<ul class="parts-list">{lis}</ul></section>')
+
+
 def mailto(subject):
     return "mailto:" + CONTACT_EMAIL + "?subject=" + re.sub(r"\s", "%20", subject)
 
@@ -489,6 +534,7 @@ def model_page(s, sleds):
     </div>
     <aside class="side">{side}</aside>
   </div>
+  {parts_box(s)}
   {faq}
 </article>"""
 
