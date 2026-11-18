@@ -51,6 +51,13 @@ def hp_gap(s, long=False):
     return "Not in our source" if long else "Not listed"
 
 
+def wt_gap(s, long=False):
+    """Wording for a missing dry weight. Arctic Cat doesn't release weights for its 2026+ sleds."""
+    if s["year"] >= 2026 and s["brand"] == "Arctic Cat":
+        return "Not published by Arctic Cat" if long else "Not published"
+    return None
+
+
 def mailto(subject):
     return "mailto:" + CONTACT_EMAIL + "?subject=" + re.sub(r"\s", "%20", subject)
 
@@ -383,13 +390,13 @@ def model_page(s, sleds):
         return f"<tr><th scope=row>{k}</th><td>{v}</td></tr>" if v not in (None, "", "—") else ""
     hp = f"{n(s['hp'])} hp" if s["hp"] else None
     missing = [label for label, v in [("horsepower", s["hp"] or hp_gap(s) == "Not published"),
-                                      ("dry weight", s["dry_weight_lb"]), ("track size", s["track"]),
+                                      ("dry weight", s["dry_weight_lb"] or wt_gap(s)), ("track size", s["track"]),
                                       ("fuel capacity", s["fuel_gal"]), ("drive belt part number", s["belt_pn"]),
                                       ("clutching", s["clutch"]), ("overall length", s["length_in"])] if not v]
     plate = "".join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in [
         ("Engine", f"{n(s['cc'])} cc"),
         ("Power", hp or hp_gap(s)),
-        ("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else "—"),
+        ("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else (wt_gap(s) or "—")),
         ("Track", f"{n(s['track_length_in'])} in" if s["track_length_in"] else "—"),
     ])
     engine = (row("Engine", e(s["engine"])) + row("Type", e(s["engine_detail"] or "")) +
@@ -401,7 +408,7 @@ def model_page(s, sleds):
              row("Clutching", e(s["clutch"]) if s["clutch"] else None) +
              row("Drive sprocket pitch", f"{n(s['sprocket_pitch_in'])} in" if s["sprocket_pitch_in"] else None) +
              row("Starter", e(s["starter"]) if s["starter"] else None))
-    chassis = (row("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else None) +
+    chassis = (row("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else wt_gap(s, long=True)) +
                row("Fuel capacity", f"{n(s['fuel_gal'])} US gal ({round(s['fuel_gal'] * 3.785, 1)} L)" if s["fuel_gal"] else None) +
                row("Overall length", f"{n(s['length_in'])} in" if s["length_in"] else None) +
                row("Platform", e(s["platform"]) if s["platform"] else None) +
