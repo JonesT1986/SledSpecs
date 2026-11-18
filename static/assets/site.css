@@ -223,3 +223,6 @@ table{border-collapse:collapse;width:100%}
 .cols li{break-inside:avoid;margin:.2rem 0}
 
 .spec.vs th[scope=col]{text-align:left}
+.srcnotes{max-width:66ch;margin:10px 0 0;color:var(--slate);font-size:.95rem}
+.srcnotes summary{cursor:pointer;font-weight:600}
+.srcnotes p{margin:6px 0 0}

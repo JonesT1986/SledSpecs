@@ -472,6 +472,53 @@ def all_brands_page(sleds):
                 body, jsonld=graph(ORG, c_ld), active="brands")
 
 
+FIELD_WORDS = {
+    "dry_weight_lb": "Dry weight", "width_in": "Width", "height_in": "Height", "length_in": "Length",
+    "track_length_in": "Track length", "track_width_in": "Track width", "lug_in": "Lug height",
+    "fuel_gal": "Fuel capacity", "msrp_usd": "MSRP", "belt_pn": "Drive belt", "cc": "Displacement",
+    "hp": "Horsepower", "cylinders": "Cylinders", "secondary_clutch": "Secondary clutch",
+    "primary_clutch": "Primary clutch", "front_travel_in": "Front travel", "rear_travel_in": "Rear travel",
+    "ski_stance_in": "Ski stance", "url": "Source link", "track_name": "Track", "starter": "Starter",
+}
+RESEARCH_NOTE = re.compile(r"left null|rather than guessed|is recorded|recorded\b|OEM-fed|spec[- ]feed|dealer (?:spec|inventory|listing|data|feed)|"
+                           r"conflict|cross-check|do not assume|verify|not split out|sheet figure used|archive (?:spec )?page|"
+                           r"\b[a-z]+\.[a-z_]+\b|\b[a-z]+_[a-z_]+\b", re.I)
+
+
+def humanize_note(t):
+    """Turn research-log notes (field codes, 'left null', 'recorded') into plain reader-facing text."""
+    def word(m):
+        pre, key = m.group(1), m.group(2) or m.group(3)
+        if pre == "track" and key in ("width_in", "length_in"):
+            return "Track " + key.split("_")[0]
+        return FIELD_WORDS.get(key, key.replace("_", " ").capitalize())
+    t = re.sub(r"\b(dimensions|engine|track|suspension|capacities|drivetrain|source|chassis|features)\.([a-z_]+)\b|\b([a-z]+(?:_[a-z]+)+)\b", word, t)
+    for a_, b_ in [(r"left null rather than guessed", "so it is not shown"), (r"left null", "not shown"),
+                   (r"no record created", "no page was made"), (r"\bis recorded\b", "is shown"),
+                   (r"\bare recorded\b", "are shown"), (r"\brecorded\b", "shown"), (r"\bOEM-fed\b", "manufacturer-supplied"),
+                   (r"\bspec[- ]feed\b", "spec data"), (r"\bsheet figure used\b", "the sheet figure is shown"),
+                   (r"\bdo not assume\b", "not assumed"), (r"\bDX1\b ?", "")]:
+        t = re.sub(a_, b_, t, flags=re.I)
+    t = re.sub(r"\s+", " ", t).strip()
+    labels = (r"(?:dry weight|width|height|length|track length|track width|track pitch|track options|track|lug height|fuel capacity|"
+              r"msrp|drive belt|secondary clutch|primary clutch|front travel|rear travel|ski stance|source link|engine bore|"
+              r"bore x stroke|oil capacity|starter|cooling|cylinders|horsepower|conflict|model|engine oil capacity)")
+    t = re.sub(r"(?<=[a-z0-9\)\.\"'%])(?<!track)(?<!engine)(?<!the)(?<!oil)(?<!dry)(?<!front)(?<!rear)(?<!overall)\s+(?="
+               + labels + r"\b\s*(?:-|:|is from|\d))", "\x00", t, flags=re.I)
+    t = re.sub(r"\.?\x00([a-z]?)", lambda m: ". " + m.group(1).upper(), t)
+    t = t[:1].upper() + t[1:]
+    return t if t.endswith((".", ")")) else t + "."
+
+
+def render_note(t):
+    if not t:
+        return ""
+    if RESEARCH_NOTE.search(t):
+        return ('<details class="srcnotes"><summary>How these figures were checked</summary>'
+                f'<p>{e(humanize_note(t))}</p></details>')
+    return f'<p class="note">{e(t)}</p>'
+
+
 def fit_title(*cands, limit=62):
     """First candidate short enough for Google to show in full; else the shortest."""
     for c in cands:
@@ -574,7 +621,7 @@ def model_page(s, sleds):
            else "<p><b>Source:</b> being confirmed.</p>")
     gaps = (f"<p>Not on file yet for this sled: {', '.join(missing)}."
             + (f' Have the owner\'s manual? <a href="{mailto("Correction: " + nm)}">Send us the page</a>.' if CONTACT_EMAIL else "") + "</p>") if missing else ""
-    note = f'<p class="note">{e(s["notes"])}</p>' if s["notes"] else ""
+    note = render_note(s["notes"])
 
     body = f"""{c_html}
 <article class="model">
