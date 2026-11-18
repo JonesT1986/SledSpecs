@@ -91,6 +91,12 @@ def amz(q):
     return f"https://www.amazon.ca/s?k={re.sub(r'\s+', '+', q.strip())}&tag={AMAZON_TAG}"
 
 
+def cover_q(s, fam):
+    plat = s["platform"] if s["platform"] and len(s["platform"]) < 20 and "(" not in s["platform"] and s["platform"] != "Youth" else ""
+    tl = n(s["track_length_in"]) if s["track_length_in"] else ""
+    return " ".join(x for x in [s["brand"], plat, fam, tl, "snowmobile cover"] if x)
+
+
 def parts_box(s):
     """Tagged Amazon.ca searches for the parts and supplies this sled actually uses."""
     if not AMAZON_TAG:
@@ -108,7 +114,7 @@ def parts_box(s):
     else:
         items += [("Spark plugs", f"{br} {eng} spark plug".replace(br + " " + br, br)),
                   ("Engine oil", f"{br} 4-stroke snowmobile oil 0W-40" if four else OIL.get(br, "2-stroke snowmobile oil")),
-                  (f"{fam} sled cover" if fam else "Sled cover", f"{br} {fam} snowmobile cover"),
+                  (f"{fam} sled cover" if fam else "Sled cover", cover_q(s, fam)),
                   ("Carbide runners and wear bars", f"{br} snowmobile carbide runners"),
                   ("Chaincase and gear oil", f"{br} snowmobile chaincase oil"),
                   ("Track studs and backers", "snowmobile track studs backers")]
