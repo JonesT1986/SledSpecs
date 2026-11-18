@@ -11,5 +11,6 @@ date,what,change
 2026-11-18,146 Polaris models 1985-1995 added,"Engine, bore and stroke, carburetion, length, ski stance, track and fuel capacity from Polaris's own service-manual chapter 'Models and Specifications' (1985-1995). Rows where the scan was ambiguous were left out rather than guessed."
 2026-11-18,76 Ski-Doo models 1970-1973 and 12 Polaris models 1972/1979 added,"From Bombardier's 1970-73 technical data book and Polaris's 1970s 'Models and Specifications' section. Ski-Doo weights are printed without saying dry or wet, so they're shown in the notes rather than as dry weight. A few values that look like misprints in the scans were left out."
 2026-11-18,Catalogue update,"Catalogue updated: 474 sourced sleds in total (2023-2026 Ski-Doo, plus Polaris, Arctic Cat and Yamaha), compiled from factory spec sheets and manuals, each row with its source. Lynx records held back until the site accepts the brand."
-2026-11-18,"2026 Polaris model names","Cleaned 69 garbled display names (e.g. INDY 200, 650 INDY XCR 137); specs unchanged"
-2026-11-18,"2024 650 Indy XCR 137 and Sidewinder SRX LE EPS","Added factory sources (Polaris owner's manual, Yamaha spec page); added Indy XCR length and bore/stroke"
+2026-11-18,2026 Polaris model names,"Cleaned 69 garbled display names (e.g. INDY 200, 650 INDY XCR 137); specs unchanged"
+2026-11-18,2024 650 Indy XCR 137 and Sidewinder SRX LE EPS,"Added factory sources (Polaris owner's manual, Yamaha spec page); added Indy XCR length and bore/stroke"
+2026-11-18,2023 Ski-Doo Renegade X-RS 900 ACE Turbo R,Row replaced by the fully sourced factory-sheet record: dry weight 533 lb and clutching (pDrive / QRS Vent) added; MSRP removed because BRP's spec sheet does not publish it.
