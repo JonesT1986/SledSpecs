@@ -266,7 +266,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
     </div>
     <div>
       <h2>SledSpecs</h2>
-      <ul><li><a href="/belt-finder/">Drive belt finder</a></li><li><a href="/compare/">Compare sleds</a></li><li><a href="/about/">How the data is gathered</a></li><li><a href="/about/#corrections">Corrections log</a></li>{('<li><a href="' + mailto('SledSpecs correction') + '">Send a correction</a></li>') if CONTACT_EMAIL else ''}</ul>
+      <ul><li><a href="/belt-finder/">Drive belt finder</a></li><li><a href="/parts/">Belt and plug part numbers</a></li><li><a href="/compare/">Compare sleds</a></li><li><a href="/about/">How the data is gathered</a></li><li><a href="/about/#corrections">Corrections log</a></li>{('<li><a href="' + mailto('SledSpecs correction') + '">Send a correction</a></li>') if CONTACT_EMAIL else ''}</ul>
     </div>
   </div>
   <div class="wrap foot-legal"><p>Ski-Doo, Polaris, Arctic Cat and Yamaha are trademarks of their owners. SledSpecs is independent and not affiliated with any manufacturer. Always confirm part numbers with your dealer before ordering.</p></div>
@@ -472,6 +472,23 @@ def all_brands_page(sleds):
                 body, jsonld=graph(ORG, c_ld), active="brands")
 
 
+def summary(s, nm):
+    cc = n(s["cc"]) if s["cc"] else ""
+    art = "an" if cc and (cc[0] == "8" or cc[:2] in ("11", "18") and len(cc.split(".")[0]) in (2, 4, 5)) else "a"
+    bits = [f"{art} {cc} cc {e(s['engine'])}" if s["engine"] and cc else (f"{art} {cc} cc engine" if cc else "")]
+    if s["hp"]: bits.append(f"makes {n(s['hp'])} hp")
+    if s["dry_weight_lb"]: bits.append(f"weighs {n(s['dry_weight_lb'])} lb dry")
+    if s["track"]: bits.append(f"runs a {e(s['track'])} track")
+    if s["belt_pn"]: bits.append(f"uses drive belt {e(s['belt_pn'])}")
+    bits = [x for x in bits if x]
+    if not bits:
+        return ""
+    first = ("has " + bits[0]) if bits[0].startswith(("a ", "an ")) else bits[0]
+    rest = bits[1:]
+    txt = first + ("" if not rest else (", " + ", ".join(rest[:-1]) + (", and " if len(rest) > 1 else " and ") + rest[-1] if len(rest) > 1 else " and " + rest[0]))
+    return f"The {e(nm)} {txt}."
+
+
 def model_page(s, sleds):
     def row(k, v):
         return f"<tr><th scope=row>{k}</th><td>{v}</td></tr>" if v not in (None, "", "—") else ""
@@ -491,11 +508,11 @@ def model_page(s, sleds):
               row("Horsepower", hp or hp_gap(s, long=True)) +
               row("Power-to-weight", f"{s['lb_per_hp']} lb per hp" if s["lb_per_hp"] else None))
     drive = (row("Track", e(s["track"]) if s["track"] else None) + row("Track model", e(s["track_name"]) if s["track_name"] else None) +
-             row("Drive belt", f'<b class="pn">{e(s["belt_pn"])}</b>' if s["belt_pn"] else None) +
+             row("Drive belt", f'<a class="pn" href="{belt_url(s["belt_pn"])}">{e(s["belt_pn"])}</a>' if s["belt_pn"] else None) +
              row("Clutching", e(s["clutch"]) if s["clutch"] else None) +
              row("Drive sprocket pitch", f"{n(s['sprocket_pitch_in'])} in" if s["sprocket_pitch_in"] else None) +
              row("Starter", e(s["starter"]) if s["starter"] else None) +
-             (row("Spark plug", f'{e(plug_for(s)["plug"])} <span class="small">({e(plug_for(s)["source"])})</span>') if plug_for(s) else ""))
+             (row("Spark plug", f'<a href="{plug_url(plug_for(s)["plug"])}">{e(plug_for(s)["plug"])}</a> <span class="small">({e(plug_for(s)["source"])})</span>') if plug_for(s) else ""))
     chassis = (row("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else wt_gap(s, long=True)) +
                row("Fuel capacity", f"{n(s['fuel_gal'])} US gal ({round(s['fuel_gal'] * 3.785, 1)} L)" if s["fuel_gal"] else None) +
                row("Overall length", f"{n(s['length_in'])} in" if s["length_in"] else None) +
@@ -518,7 +535,7 @@ def model_page(s, sleds):
         if same_belt:
             side += "<p>Also fits:</p><ul>" + "".join(f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in same_belt[:8]) + "</ul>"
             if len(same_belt) > 8:
-                side += f'<p class="small"><a href="/belt-finder/?q={e(s["belt_pn"])}">See all {len(same_belt) + 1} sleds that use this belt</a></p>'
+                side += f'<p class="small"><a href="{belt_url(s["belt_pn"])}">See all {len(same_belt) + 1} sleds that use the {e(s["belt_pn"])}</a></p>'
         side += '<p class="small">Confirm the part number with your dealer before ordering.' + (' As an Amazon Associate, SledSpecs earns from qualifying purchases.' if AMAZON_TAG else '') + '</p></div>'
     side += f'<button class="btn go wide" type="button" data-compare="{s["key"]}" aria-pressed="false">Add to compare</button>'
     if related:
@@ -553,6 +570,7 @@ def model_page(s, sleds):
   <header class="model-h">
     <p class="kicker"><a href="/snowmobiles/{s['brand_slug']}/">{e(s['brand'])}</a> / <a href="/snowmobiles/type/{slug(s['category'])}/">{e(s['category'])}</a></p>
     <h1 class="h1">{e(nm)} specs</h1>
+    <p class="lede">{summary(s, nm)}</p>
     {note}
   </header>
   <dl class="plate">{plate}</dl>
@@ -608,6 +626,77 @@ def belt_page(sleds):
 <p class="empty" hidden>No sled or belt number matches that.</p></div></section>"""
     return page("/belt-finder/", "Snowmobile Drive Belt Finder by Model | SledSpecs",
                 "Look up the factory drive belt part number and track size for Ski-Doo, Polaris, Arctic Cat and Yamaha snowmobiles.",
+                body, jsonld=graph(ORG, c_ld), active="belts")
+
+
+def join_and(xs):
+    xs = list(xs)
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1] if xs else ""
+
+
+def belt_url(pn):
+    return f"/parts/belts/{slug(pn)}/"
+
+
+def plug_url(plug):
+    return f"/parts/spark-plugs/{slug(plug)}/"
+
+
+def part_groups(sleds):
+    belts, plugs = {}, {}
+    for s in sleds:
+        if s["belt_pn"]:
+            belts.setdefault(s["belt_pn"], []).append(s)
+        pl = plug_for(s)
+        if pl:
+            plugs.setdefault(pl["plug"], []).append(s)
+    return belts, plugs
+
+
+def part_page(kind, pn, group):
+    group = sorted(group, key=lambda x: (-x["year"], x["model"]))
+    brand = max({x["brand"] for x in group}, key=lambda b: sum(x["brand"] == b for x in group))
+    yrs = sorted({x["year"] for x in group})
+    span = f"{yrs[0]}" if yrs[0] == yrs[-1] else f"{yrs[0]} to {yrs[-1]}"
+    engines = sorted({x["engine"] for x in group if x["engine"]})
+    fams = sorted({family(x) for x in group if family(x)})
+    if kind == "belt":
+        url, what, noun = belt_url(pn), f"{brand} {pn} drive belt", "drive belt"
+        q = f"{brand} {pn} drive belt"
+        src = "Belt part numbers come from each sled's owner's manual or the manufacturer's genuine-parts fitment, named on every sled page."
+    else:
+        url, what, noun = plug_url(pn), f"{pn} spark plug", "spark plug"
+        q = f"{pn} spark plug"
+        src = "Plug numbers come from the manufacturer's genuine-parts listings and owner's manuals: " + e(plug_for(group[0])["source"]) + "."
+    lede = (f"The {e(what)} is the factory {noun} for {len(group)} {e(brand)} snowmobile{'s' if len(group) != 1 else ''} "
+            f"from {span}, including the {e(join_and(fams[:6]))} {'line' if len(fams[:6]) == 1 else 'lines'} with the {e(join_and([x.replace('Rotax ', '') for x in engines[:4]]))} engine{'s' if len(engines) > 1 else ''}.")
+    rows = "".join(f'<tr><td>{x["year"]}</td><th scope=row class="m"><a href="{x["url"]}">{e(x["brand"])} {e(x["model"])}</a></th><td>{e(x["engine"] or "")}</td></tr>' for x in group)
+    btn = (f'<a class="btn buy" href="{amz(q)}" rel="sponsored nofollow noopener" target="_blank">Check {e(pn)} price on Amazon</a>'
+           f'<p class="small">As an Amazon Associate, SledSpecs earns from qualifying purchases. Confirm the part number with your dealer before ordering.</p>') if AMAZON_TAG else ""
+    c_html, c_ld = crumbs([("Home", "/"), ("Parts", "/parts/"), (what, url)])
+    qas = [(f"What snowmobiles use the {what}?", f"{len(group)} sleds in our catalogue list it, from {span}: " + ", ".join(f"{x['year']} {x['brand']} {x['model']}" for x in group[:8]) + (" and more." if len(group) > 8 else ".")),
+           (f"Where does the {pn} number come from?", src)]
+    faq, faq_ld = faq_block(qas, "Questions")
+    body = f"""{c_html}<section class="block"><h1 class="h1">{e(what)}: which sleds it fits</h1>
+<p class="lede">{lede}</p>{btn}
+<div class="sheet"><table class="cat"><caption>{len(group)} sleds use the {e(pn)}</caption><thead><tr><th scope=col>Year</th><th scope=col>Sled</th><th scope=col>Engine</th></tr></thead><tbody>{rows}</tbody></table></div>
+{faq}</section>"""
+    title = f"{what.replace(brand + ' ', brand + ' ', 1)}: Fits {len(group)} Snowmobiles ({span}) | SledSpecs"
+    desc = f"Which snowmobiles use the {what}: {len(group)} {brand} sleds from {span}, with model years and engines. Factory part number, sourced."
+    return url, page(url, title, desc, body, jsonld=graph(ORG, c_ld, itemlist(group, f"Sleds that use the {pn}"), faq_ld), active="belts")
+
+
+def parts_index(belts, plugs):
+    def lst(d, fn, noun):
+        items = sorted(d.items(), key=lambda kv: -len(kv[1]))
+        return "<ul class=\"cols\">" + "".join(f'<li><a href="{fn(k)}">{e(k)}</a> <span class="small">({len(v)} sleds)</span></li>' for k, v in items) + "</ul>"
+    c_html, c_ld = crumbs([("Home", "/"), ("Parts", "/parts/")])
+    body = f"""{c_html}<section class="block prose"><h1 class="h1">Snowmobile part numbers: belts and spark plugs</h1>
+<p class="lede">Look up a factory drive belt or spark plug number and see every sled it fits. Every number is sourced from the manufacturer.</p>
+<h2>Drive belts</h2>{lst(belts, belt_url, "belt")}
+<h2>Spark plugs</h2>{lst(plugs, plug_url, "plug")}</section>"""
+    return page("/parts/", "Snowmobile Drive Belt & Spark Plug Part Numbers | SledSpecs",
+                "Factory snowmobile drive belt and spark plug part numbers, with every Ski-Doo, Polaris, Arctic Cat and Yamaha sled each one fits.",
                 body, jsonld=graph(ORG, c_ld), active="belts")
 
 
@@ -677,6 +766,12 @@ def main():
     for s in sleds:
         write(s["url"], model_page(s, sleds)); urls.append((s["url"], s["checked"] or TODAY))
     write("/belt-finder/", belt_page(sleds))
+    belts, plugs = part_groups(sleds)
+    for pn, g in belts.items():
+        u, html_ = part_page("belt", pn, g); write(u, html_); urls.append((u, TODAY))
+    for pl, g in plugs.items():
+        u, html_ = part_page("plug", pl, g); write(u, html_); urls.append((u, TODAY))
+    write("/parts/", parts_index(belts, plugs)); urls.append(("/parts/", TODAY))
     write("/compare/", compare_page())
     write("/about/", about_page(sleds, corrections))
     write("/404.html", notfound())

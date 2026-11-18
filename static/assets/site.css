@@ -218,3 +218,6 @@ table{border-collapse:collapse;width:100%}
 .parts-list{list-style:none;padding:0;margin:.75rem 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.5rem}
 .parts-list a{display:block;padding:.7rem .9rem;border:1px solid var(--line,#c9d3dc);border-radius:var(--r,6px);text-decoration:none;font-weight:600;min-height:44px;box-sizing:border-box}
 .parts-list a:hover,.parts-list a:focus-visible{border-color:#e38800;background:#fff6e8}
+
+.cols{columns:3 220px;padding-left:1.1rem}
+.cols li{break-inside:avoid;margin:.2rem 0}
