@@ -441,9 +441,11 @@ def model_page(s, sleds):
     side = ""
     if s["belt_pn"]:
         side += f'<div class="fit"><h2>Drive belt</h2><p class="pn big">{e(s["belt_pn"])}</p>'
-        if same_belt:
-            side += "<p>Also fits:</p><ul>" + "".join(f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in same_belt) + "</ul>"
         side += buy_link(s)
+        if same_belt:
+            side += "<p>Also fits:</p><ul>" + "".join(f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in same_belt[:8]) + "</ul>"
+            if len(same_belt) > 8:
+                side += f'<p class="small"><a href="/belt-finder/?q={e(s["belt_pn"])}">See all {len(same_belt) + 1} sleds that use this belt</a></p>'
         side += '<p class="small">Confirm the part number with your dealer before ordering.' + (' As an Amazon Associate, SledSpecs earns from qualifying purchases.' if AMAZON_TAG else '') + '</p></div>'
     side += f'<button class="btn go wide" type="button" data-compare="{s["key"]}" aria-pressed="false">Add to compare</button>'
     if related:
