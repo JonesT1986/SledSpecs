@@ -58,6 +58,21 @@ def wt_gap(s, long=False):
     return None
 
 
+AMAZON_TAG = os.environ.get("SLEDSPECS_AMAZON_TAG", "sledspecs-20").strip()
+
+
+def amazon_url(s):
+    """Amazon.ca search for this sled's OEM belt part number, tagged with our Associates ID."""
+    q = re.sub(r"\s+", "+", f"{s['brand']} {s['belt_pn']} drive belt")
+    return f"https://www.amazon.ca/s?k={q}&tag={AMAZON_TAG}"
+
+
+def buy_link(s, cls="btn buy wide", label="Check belt price on Amazon"):
+    if not (AMAZON_TAG and s["belt_pn"]):
+        return ""
+    return f'<a class="{cls}" href="{amazon_url(s)}" rel="sponsored nofollow noopener" target="_blank">{label}</a>'
+
+
 def mailto(subject):
     return "mailto:" + CONTACT_EMAIL + "?subject=" + re.sub(r"\s", "%20", subject)
 
@@ -167,7 +182,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
   <div class="wrap foot-in">
     <div>
       <img class="foot-logo" src="/assets/logo-dark.webp" alt="SledSpecs" width="157" height="28" loading="lazy">
-      <p>Factory snowmobile specs, belt and track fitment, gathered from manufacturer spec sheets and owner's manuals. Every figure names its source.</p>
+      <p>Factory snowmobile specs, belt and track fitment, gathered from manufacturer spec sheets and owner's manuals. Every figure names its source.</p>{('<p class="small">As an Amazon Associate, SledSpecs earns from qualifying purchases. Belt links go to Amazon.ca.</p>') if AMAZON_TAG else ''}
     </div>
     <div>
       <h2>Brands</h2>
@@ -428,7 +443,8 @@ def model_page(s, sleds):
         side += f'<div class="fit"><h2>Drive belt</h2><p class="pn big">{e(s["belt_pn"])}</p>'
         if same_belt:
             side += "<p>Also fits:</p><ul>" + "".join(f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in same_belt) + "</ul>"
-        side += '<p class="small">Confirm with your dealer before ordering.</p></div>'
+        side += buy_link(s)
+        side += '<p class="small">Confirm the part number with your dealer before ordering.' + (' As an Amazon Associate, SledSpecs earns from qualifying purchases.' if AMAZON_TAG else '') + '</p></div>'
     side += f'<button class="btn go wide" type="button" data-compare="{s["key"]}" aria-pressed="false">Add to compare</button>'
     if related:
         side += '<div class="rel"><h2>Similar sleds</h2><ul>' + "".join(
@@ -504,7 +520,7 @@ def model_page(s, sleds):
 
 def belt_page(sleds):
     rows = "".join(f"""<tr data-search="{e((s['full']+' '+(s['belt_pn'] or '')+' '+(s['track'] or '')).lower())}"><th scope=row class="m"><a href="{s['url']}">{e(s['full'])}</a></th>
-<td data-l="Drive belt">{('<b class="pn">'+e(s['belt_pn'])+'</b>') if s['belt_pn'] else '<span class="np">Not on file yet</span>'}</td>
+<td data-l="Drive belt">{('<b class="pn">'+e(s['belt_pn'])+'</b> '+buy_link(s, cls="buy-sm", label="Amazon")) if s['belt_pn'] else '<span class="np">Not on file yet</span>'}</td>
 <td data-l="Track">{e(s['track'] or '—')}</td><td data-l="Sprocket pitch">{(n(s['sprocket_pitch_in'])+' in') if s['sprocket_pitch_in'] else '—'}</td></tr>""" for s in sleds)
     c_html, c_ld = crumbs([("Home", "/"), ("Belt finder", "/belt-finder/")])
     body = f"""{c_html}
