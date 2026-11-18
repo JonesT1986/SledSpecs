@@ -18,5 +18,5 @@ Static snowmobile spec site. Every page is generated from two spreadsheets.
 The build warns about duplicate ids, unknown brands or types, and sleds with no source.
 
 ## Settings
-- Contact address for "Send a correction" links: set the `SLEDSPECS_CONTACT_EMAIL` environment variable in Vercel (Project Settings > Environment Variables). Default is corrections@sledspecs.com.
+- Contact address for "Send a correction" links: set the `SLEDSPECS_CONTACT_EMAIL` environment variable in Vercel (Project Settings > Environment Variables). Until it's set, the correction links are hidden.
 - Any `*.vercel.app` address sends a noindex header, so only sledspecs.com gets indexed.

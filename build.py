@@ -13,7 +13,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, "dist")
 SITE = "https://sledspecs.com"
 SITE_NAME = "SledSpecs"
-CONTACT_EMAIL = os.environ.get("SLEDSPECS_CONTACT_EMAIL", "corrections@sledspecs.com")
+CONTACT_EMAIL = os.environ.get("SLEDSPECS_CONTACT_EMAIL", "").strip()  # empty = hide correction links
 TODAY = date.today().isoformat()
 
 BRANDS = ["Ski-Doo", "Polaris", "Arctic Cat", "Yamaha"]
@@ -160,7 +160,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
     </div>
     <div>
       <h2>SledSpecs</h2>
-      <ul><li><a href="/belt-finder/">Drive belt finder</a></li><li><a href="/compare/">Compare sleds</a></li><li><a href="/about/">How the data is gathered</a></li><li><a href="/about/#corrections">Corrections log</a></li><li><a href="{mailto('SledSpecs correction')}">Send a correction</a></li></ul>
+      <ul><li><a href="/belt-finder/">Drive belt finder</a></li><li><a href="/compare/">Compare sleds</a></li><li><a href="/about/">How the data is gathered</a></li><li><a href="/about/#corrections">Corrections log</a></li>{('<li><a href="' + mailto('SledSpecs correction') + '">Send a correction</a></li>') if CONTACT_EMAIL else ''}</ul>
     </div>
   </div>
   <div class="wrap foot-legal"><p>Ski-Doo, Polaris, Arctic Cat and Yamaha are trademarks of their owners. SledSpecs is independent and not affiliated with any manufacturer. Always confirm part numbers with your dealer before ordering.</p></div>
@@ -430,7 +430,7 @@ def model_page(s, sleds):
     src = (f"<p><b>Source:</b> {e(s['source'])}. Checked {e(s['checked'] or '')}.</p>" if s["source"]
            else "<p><b>Source:</b> being confirmed.</p>")
     gaps = (f"<p>Not on file yet for this sled: {', '.join(missing)}. "
-            f'Have the owner\'s manual? <a href="{mailto("Correction: " + nm)}">Send us the page</a>.</p>') if missing else ""
+            + (f'Have the owner\'s manual? <a href="{mailto("Correction: " + nm)}">Send us the page</a>.' if CONTACT_EMAIL else "") + "</p>") if missing else ""
     note = f'<p class="note">{e(s["notes"])}</p>' if s["notes"] else ""
 
     body = f"""{c_html}
@@ -509,6 +509,8 @@ def about_page(sleds, corrections):
     srcs = sorted({s["source"] for s in sleds if s["source"]})
     log = "".join(f"<tr><td>{e(c['date'])}</td><td>{e(c['what'])}</td><td>{e(c['change'])}</td></tr>" for c in reversed(corrections))
     c_html, c_ld = crumbs([("Home", "/"), ("About the data", "/about/")])
+    spot = (f"<h2>Spot a mistake?</h2><p><a href=\"{mailto('SledSpecs correction')}\">Email a correction</a> with a photo of the manual page or spec sheet. We'll update the sled and log the change here.</p>"
+            if CONTACT_EMAIL else "")
     body = f"""{c_html}<section class="block prose"><h1 class="h1">How the data is gathered</h1>
 <p>Every sled starts from one document: the manufacturer's spec sheet, the owner's manual specifications chapter, or a dealer spec sheet for that exact model year. That source is named on the sled's page with the date it was last checked.</p>
 <h2>What we don't do</h2>
@@ -516,7 +518,7 @@ def about_page(sleds, corrections):
 <h2>Sources used so far</h2><ul>{''.join(f'<li>{e(x)}</li>' for x in srcs)}</ul>
 <h2 id="corrections">Corrections log</h2><p>When a figure changes, it's recorded here.</p>
 <div class="sheet"><table class="log"><thead><tr><th scope=col>Date</th><th scope=col>Sled or field</th><th scope=col>Change</th></tr></thead><tbody>{log}</tbody></table></div>
-<h2>Spot a mistake?</h2><p><a href="{mailto('SledSpecs correction')}">Email a correction</a> with a photo of the manual page or spec sheet. We'll update the sled and log the change here.</p>
+{spot}
 </section>"""
     return page("/about/", "How SledSpecs Gathers Snowmobile Specs | SledSpecs",
                 "Where SledSpecs snowmobile specifications come from, how gaps are handled, and a log of every correction.",
