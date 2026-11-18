@@ -79,6 +79,26 @@ OIL = {"Ski-Doo": "Ski-Doo XPS 2-stroke synthetic oil", "Polaris": "Polaris VES 
        "Arctic Cat": "Arctic Cat C-TEC2 2-stroke oil", "Yamaha": "Yamalube 2-stroke snowmobile oil"}
 
 
+def load_plugs():
+    f = os.path.join(ROOT, "data", "plugs.csv")
+    return list(csv.DictReader(open(f, encoding="utf-8"))) if os.path.exists(f) else []
+
+
+PLUGS = None
+
+
+def plug_for(s):
+    global PLUGS
+    if PLUGS is None:
+        PLUGS = load_plugs()
+    for p in PLUGS:
+        if (p["brand"] == s["brand"] and p["engine"] == (s["engine"] or "").strip() and s["year"] >= int(p["min_year"] or 0)
+                and (not p["model_contains"] or p["model_contains"] in s["model"])
+                and (not p["model_excludes"] or p["model_excludes"] not in s["model"])):
+            return p
+    return None
+
+
 def family(s):
     ws = s["model"].split()
     for i, w in enumerate(ws):
@@ -112,7 +132,8 @@ def parts_box(s):
                   ("Carbide runners and skags", "snowmobile carbide runners"),
                   ("Snowmobile cover", "universal snowmobile cover")]
     else:
-        items += [("Spark plugs", f"{br} {eng} spark plug".replace(br + " " + br, br)),
+        pl = plug_for(s)
+        items += [(f"Spark plug: {pl['plug']}", f"{pl['plug']} spark plug") if pl else ("Spark plugs", f"{br} {eng} spark plug".replace(br + " " + br, br)),
                   ("Engine oil", f"{br} 4-stroke snowmobile oil 0W-40" if four else OIL.get(br, "2-stroke snowmobile oil")),
                   (f"{fam} sled cover" if fam else "Sled cover", cover_q(s, fam)),
                   ("Carbide runners and wear bars", f"{br} snowmobile carbide runners"),
@@ -473,7 +494,8 @@ def model_page(s, sleds):
              row("Drive belt", f'<b class="pn">{e(s["belt_pn"])}</b>' if s["belt_pn"] else None) +
              row("Clutching", e(s["clutch"]) if s["clutch"] else None) +
              row("Drive sprocket pitch", f"{n(s['sprocket_pitch_in'])} in" if s["sprocket_pitch_in"] else None) +
-             row("Starter", e(s["starter"]) if s["starter"] else None))
+             row("Starter", e(s["starter"]) if s["starter"] else None) +
+             (row("Spark plug", f'{e(plug_for(s)["plug"])} <span class="small">({e(plug_for(s)["source"])})</span>') if plug_for(s) else ""))
     chassis = (row("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else wt_gap(s, long=True)) +
                row("Fuel capacity", f"{n(s['fuel_gal'])} US gal ({round(s['fuel_gal'] * 3.785, 1)} L)" if s["fuel_gal"] else None) +
                row("Overall length", f"{n(s['length_in'])} in" if s["length_in"] else None) +
