@@ -6,12 +6,39 @@
   "headers": [
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "(?<sub>.*)\\.vercel\\.app" }],
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+      "has": [
+        {
+          "type": "host",
+          "value": "(?<sub>.*)\\.vercel\\.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
     },
     {
       "source": "/assets/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/snowmobiles/polaris/2026-indy-200-200-indy/",
+      "destination": "/snowmobiles/polaris/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/arctic-cat/1997-zr-580-efi/",
+      "destination": "/snowmobiles/arctic-cat/",
+      "permanent": true
     }
   ]
 }
