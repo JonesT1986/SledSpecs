@@ -6,7 +6,7 @@ Edit data/sleds.csv (one row per sled) and data/corrections.csv, then run:
 Output goes to dist/. No third-party packages needed (Vercel runs this on every push).
 Set the SLEDSPECS_CONTACT_EMAIL environment variable to choose where "send a correction" links go.
 """
-import csv, json, html, os, re, shutil, sys
+import collections, csv, json, html, os, re, shutil, sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -266,7 +266,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
     </div>
     <div>
       <h2>SledSpecs</h2>
-      <ul><li><a href="/belt-finder/">Drive belt finder</a></li><li><a href="/parts/">Belt and plug part numbers</a></li><li><a href="/compare/">Compare sleds</a></li><li><a href="/about/">How the data is gathered</a></li><li><a href="/about/#corrections">Corrections log</a></li>{('<li><a href="' + mailto('SledSpecs correction') + '">Send a correction</a></li>') if CONTACT_EMAIL else ''}</ul>
+      <ul><li><a href="/belt-finder/">Drive belt finder</a></li><li><a href="/parts/">Belt and plug part numbers</a></li><li><a href="/vs/">Model vs model comparisons</a></li><li><a href="/compare/">Compare sleds</a></li><li><a href="/about/">How the data is gathered</a></li><li><a href="/about/#corrections">Corrections log</a></li>{('<li><a href="' + mailto('SledSpecs correction') + '">Send a correction</a></li>') if CONTACT_EMAIL else ''}</ul>
     </div>
   </div>
   <div class="wrap foot-legal"><p>Ski-Doo, Polaris, Arctic Cat and Yamaha are trademarks of their owners. SledSpecs is independent and not affiliated with any manufacturer. Always confirm part numbers with your dealer before ordering.</p></div>
@@ -538,6 +538,9 @@ def model_page(s, sleds):
                 side += f'<p class="small"><a href="{belt_url(s["belt_pn"])}">See all {len(same_belt) + 1} sleds that use the {e(s["belt_pn"])}</a></p>'
         side += '<p class="small">Confirm the part number with your dealer before ordering.' + (' As an Amazon Associate, SledSpecs earns from qualifying purchases.' if AMAZON_TAG else '') + '</p></div>'
     side += f'<button class="btn go wide" type="button" data-compare="{s["key"]}" aria-pressed="false">Add to compare</button>'
+    if VS.get(s["key"]):
+        side += '<div class="rel"><h2>Compare with rivals</h2><ul>' + "".join(
+            f'<li><a href="{u}">vs {e(x["brand"])} {e(x["model"])}</a></li>' for x, u in VS[s["key"]]) + "</ul></div>"
     if related:
         side += '<div class="rel"><h2>Similar sleds</h2><ul>' + "".join(
             f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in related) + "</ul></div>"
@@ -700,6 +703,102 @@ def parts_index(belts, plugs):
                 body, jsonld=graph(ORG, c_ld), active="belts")
 
 
+VS = {}
+RIVALS = [("Ski-Doo", "Polaris"), ("Ski-Doo", "Arctic Cat"), ("Polaris", "Arctic Cat"), ("Ski-Doo", "Yamaha"), ("Polaris", "Yamaha")]
+
+
+def vs_pairs(sleds):
+    """Closest cross-brand rival for each modern sled: same year, type, engine class and track length."""
+    pairs, used = [], collections.Counter()
+    for ba, bb in RIVALS:
+        cands = []
+        for a in sleds:
+            if a["brand"] != ba or a["year"] < 2025 or not (a["cc"] and a["track_length_in"]):
+                continue
+            for c in sleds:
+                if (c["brand"] == bb and c["year"] == a["year"] and c["category"] == a["category"] and c["cc"] and c["track_length_in"]
+                        and abs(c["cc"] - a["cc"]) / a["cc"] <= 0.12 and abs(c["track_length_in"] - a["track_length_in"]) <= 9):
+                    score = abs(c["cc"] - a["cc"]) / a["cc"] * 10 + abs(c["track_length_in"] - a["track_length_in"]) + (0 if (a["dry_weight_lb"] and c["dry_weight_lb"]) else 5)
+                    cands.append((score, a, c))
+        for score, a, c in sorted(cands, key=lambda t: t[0]):
+            if used[a["key"]] >= 1 or used[c["key"]] >= 2:
+                continue
+            pairs.append((a, c)); used[a["key"]] += 1; used[c["key"]] += 1
+    return pairs
+
+
+def vs_url(a, c):
+    return f"/vs/{a['key']}-vs-{c['key']}/"
+
+
+def vs_page(a, c):
+    na, nc = f"{a['year']} {a['brand']} {a['model']}", f"{c['year']} {c['brand']} {c['model']}"
+    sa, sc = f"{a['brand']} {a['model']}", f"{c['brand']} {c['model']}"
+    diffs = []
+    if a["hp"] and c["hp"]:
+        d = a["hp"] - c["hp"]
+        diffs.append(f"The {sa} makes {n(a['hp'])} hp to the {sc}'s {n(c['hp'])} hp" + (f", {n(abs(d))} hp {'more' if d > 0 else 'less'}." if d else ", the same."))
+    else:
+        missing = [x["brand"] for x in (a, c) if not x["hp"]]
+        if missing:
+            diffs.append(f"{join_and(sorted(set(missing)))} doesn't publish horsepower for {'this sled' if len(missing) == 1 else 'these sleds'}, so a power comparison isn't possible from factory figures.")
+    if a["dry_weight_lb"] and c["dry_weight_lb"]:
+        d = a["dry_weight_lb"] - c["dry_weight_lb"]
+        diffs.append(f"Dry weight is {n(a['dry_weight_lb'])} lb for the {sa} and {n(c['dry_weight_lb'])} lb for the {sc}" +
+                     (f": the {sa if d < 0 else sc} is {n(abs(d))} lb lighter." if d else ", identical."))
+    if a["track"] and c["track"]:
+        diffs.append(f"Tracks are {e(a['track'])} on the {sa} and {e(c['track'])} on the {sc}.")
+    diffs.append(f"Engines: {e(a['engine'])} ({n(a['cc'])} cc) against the {e(c['engine'])} ({n(c['cc'])} cc).")
+    if a["fuel_gal"] and c["fuel_gal"]:
+        diffs.append(f"Fuel capacity is {n(a['fuel_gal'])} US gal versus {n(c['fuel_gal'])} US gal.")
+    if a["lb_per_hp"] and c["lb_per_hp"]:
+        diffs.append(f"Power-to-weight works out to {a['lb_per_hp']} lb per hp for the {sa} and {c['lb_per_hp']} for the {sc}; lower is quicker.")
+    if a["belt_pn"] and c["belt_pn"]:
+        diffs.append(f"Drive belts: {e(a['belt_pn'])} and {e(c['belt_pn'])}.")
+    def v(s, k, f=lambda x: x):
+        return f(s[k]) if s[k] else "—"
+    rows = [("Engine", v(a, "engine", e), v(c, "engine", e)),
+            ("Displacement", f"{n(a['cc'])} cc", f"{n(c['cc'])} cc"),
+            ("Horsepower", f"{n(a['hp'])} hp" if a["hp"] else hp_gap(a), f"{n(c['hp'])} hp" if c["hp"] else hp_gap(c)),
+            ("Dry weight", f"{n(a['dry_weight_lb'])} lb" if a["dry_weight_lb"] else (wt_gap(a) or "—"), f"{n(c['dry_weight_lb'])} lb" if c["dry_weight_lb"] else (wt_gap(c) or "—")),
+            ("Track", v(a, "track", e), v(c, "track", e)),
+            ("Fuel", f"{n(a['fuel_gal'])} US gal" if a["fuel_gal"] else "—", f"{n(c['fuel_gal'])} US gal" if c["fuel_gal"] else "—"),
+            ("Platform", v(a, "platform", e), v(c, "platform", e)),
+            ("Drive belt", v(a, "belt_pn", e), v(c, "belt_pn", e)),
+            ("Launch MSRP", f"${int(a['msrp_usd']):,} US" if a["msrp_usd"] else "—", f"${int(c['msrp_usd']):,} US" if c["msrp_usd"] else "—")]
+    tbl = "".join(f"<tr><th scope=row>{k}</th><td>{x}</td><td>{y}</td></tr>" for k, x, y in rows if not (x == "—" and y == "—"))
+    url = vs_url(a, c)
+    c_html, c_ld = crumbs([("Home", "/"), ("Comparisons", "/vs/"), (f"{sa} vs {sc}", url)])
+    lede = (f"The {e(na)} and {e(nc)} are both {e(a['category'].lower())} sleds with {e(n(a['cc']))} and {e(n(c['cc']))} cc engines. "
+            + e(diffs[0]) if diffs else "")
+    qas = [(f"Which is lighter, the {sa} or the {sc}?",
+            (f"The {sa if a['dry_weight_lb'] < c['dry_weight_lb'] else sc} is lighter: {n(min(a['dry_weight_lb'], c['dry_weight_lb']))} lb dry against {n(max(a['dry_weight_lb'], c['dry_weight_lb']))} lb."
+             if a["dry_weight_lb"] and c["dry_weight_lb"] and a["dry_weight_lb"] != c["dry_weight_lb"] else "Factory dry weights aren't available for both sleds, so we can't say from published figures.")),
+           (f"Do the {sa} and {sc} use the same drive belt?",
+            (f"No. The {sa} uses {a['belt_pn']} and the {sc} uses {c['belt_pn']}." if a["belt_pn"] and c["belt_pn"] and a["belt_pn"] != c["belt_pn"] else
+             f"Both use {a['belt_pn']}." if a["belt_pn"] and a["belt_pn"] == c["belt_pn"] else "We don't have a factory belt number for both sleds yet."))]
+    faq, faq_ld = faq_block(qas, "Questions")
+    body = f"""{c_html}<section class="block"><h1 class="h1">{e(na)} vs {e(nc)}</h1>
+<p class="lede">{lede}</p>
+<div class="sheet"><table class="spec vs"><caption>Factory specs side by side</caption><thead><tr><th scope=col></th><th scope=col><a href="{a['url']}">{e(sa)}</a></th><th scope=col><a href="{c['url']}">{e(sc)}</a></th></tr></thead><tbody>{tbl}</tbody></table></div>
+<h2>Key differences</h2><ul>{''.join(f'<li>{e(x)}</li>' for x in diffs[1:]) or '<li>See the table above.</li>'}</ul>
+<p class="small">Figures come from each manufacturer's spec sheet or owner's manual, named on each sled's page. Dry weights exclude fuel and oil.</p>
+{faq}</section>"""
+    title = f"{a['year']} {sa} vs {sc}: Specs Compared | SledSpecs"
+    desc = f"{na} vs {nc}: horsepower, dry weight, track, fuel and drive belt side by side, from factory specs."
+    return url, page(url, title, desc, body, jsonld=graph(ORG, c_ld, faq_ld), active="compare")
+
+
+def vs_index(pairs):
+    items = sorted(pairs, key=lambda p: (-p[0]["year"], p[0]["category"], p[0]["model"]))
+    c_html, c_ld = crumbs([("Home", "/"), ("Comparisons", "/vs/")])
+    lis = "".join(f'<li><a href="{vs_url(a, c)}">{a["year"]} {e(a["brand"])} {e(a["model"])} vs {e(c["brand"])} {e(c["model"])}</a></li>' for a, c in items)
+    body = f"""{c_html}<section class="block prose"><h1 class="h1">Snowmobile comparisons: model vs model</h1>
+<p class="lede">Head-to-head factory specs for rival sleds of the same year, type, engine class and track length.</p><ul>{lis}</ul></section>"""
+    return page("/vs/", "Snowmobile Comparisons: Ski-Doo vs Polaris vs Arctic Cat vs Yamaha | SledSpecs",
+                "Side-by-side factory spec comparisons of rival snowmobiles: horsepower, dry weight, track and drive belt.", body, jsonld=graph(ORG, c_ld), active="compare")
+
+
 def compare_page():
     c_html, _ = crumbs([("Home", "/"), ("Compare", "/compare/")])
     body = f"""{c_html}<section class="block"><h1 class="h1">Compare sleds</h1>
@@ -763,6 +862,8 @@ def main():
     for t in TYPES:
         if any(s["category"] == t for s in sleds):
             write(f"/snowmobiles/type/{slug(t)}/", type_page(t, sleds)); urls.append((f"/snowmobiles/type/{slug(t)}/", TODAY))
+    for a, c in vs_pairs(sleds):
+        VS.setdefault(a["key"], []).append((c, vs_url(a, c))); VS.setdefault(c["key"], []).append((a, vs_url(a, c)))
     for s in sleds:
         write(s["url"], model_page(s, sleds)); urls.append((s["url"], s["checked"] or TODAY))
     write("/belt-finder/", belt_page(sleds))
@@ -772,6 +873,10 @@ def main():
     for pl, g in plugs.items():
         u, html_ = part_page("plug", pl, g); write(u, html_); urls.append((u, TODAY))
     write("/parts/", parts_index(belts, plugs)); urls.append(("/parts/", TODAY))
+    pairs = vs_pairs(sleds)
+    for a, c in pairs:
+        u, html_ = vs_page(a, c); write(u, html_); urls.append((u, TODAY))
+    write("/vs/", vs_index(pairs)); urls.append(("/vs/", TODAY))
     write("/compare/", compare_page())
     write("/about/", about_page(sleds, corrections))
     write("/404.html", notfound())
