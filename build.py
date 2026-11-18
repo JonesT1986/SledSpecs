@@ -472,6 +472,14 @@ def all_brands_page(sleds):
                 body, jsonld=graph(ORG, c_ld), active="brands")
 
 
+def fit_title(*cands, limit=62):
+    """First candidate short enough for Google to show in full; else the shortest."""
+    for c in cands:
+        if len(c) <= limit:
+            return c
+    return min(cands, key=len)
+
+
 def summary(s, nm):
     cc = n(s["cc"]) if s["cc"] else ""
     art = "an" if cc and (cc[0] == "8" or cc[:2] in ("11", "18") and len(cc.split(".")[0]) in (2, 4, 5)) else "a"
@@ -611,7 +619,8 @@ def model_page(s, sleds):
     if s["belt_pn"]: bits.append(f"belt {s['belt_pn']}")
     desc = f"{nm} specs: " + ", ".join(bits) + ". Factory figures with source."
     title_bits = "HP, Weight, Track" + (" & Belt" if s["belt_pn"] else "")
-    return page(s["url"], f"{nm} Specs: {title_bits} | SledSpecs", desc, body,
+    return page(s["url"], fit_title(f"{nm} Specs: {title_bits} | SledSpecs", f"{nm} Specs: {title_bits}",
+                                     f"{nm} Specs: HP, Weight, Track", f"{nm} Specs and Weight", f"{nm} Specs"), desc, body,
                 jsonld=graph(ORG, c_ld, veh, faq_ld), active="brands")
 
 
@@ -784,7 +793,8 @@ def vs_page(a, c):
 <h2>Key differences</h2><ul>{''.join(f'<li>{e(x)}</li>' for x in diffs[1:]) or '<li>See the table above.</li>'}</ul>
 <p class="small">Figures come from each manufacturer's spec sheet or owner's manual, named on each sled's page. Dry weights exclude fuel and oil.</p>
 {faq}</section>"""
-    title = f"{a['year']} {sa} vs {sc}: Specs Compared | SledSpecs"
+    title = fit_title(f"{a['year']} {sa} vs {sc}: Specs Compared | SledSpecs", f"{a['year']} {sa} vs {sc}: Specs Compared",
+                      f"{a['year']} {sa} vs {sc} Specs", f"{a['year']} {sa} vs {sc}")
     desc = f"{na} vs {nc}: horsepower, dry weight, track, fuel and drive belt side by side, from factory specs."
     return url, page(url, title, desc, body, jsonld=graph(ORG, c_ld, faq_ld), active="compare")
 

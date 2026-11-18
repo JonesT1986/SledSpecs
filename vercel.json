@@ -39,6 +39,291 @@
       "source": "/snowmobiles/arctic-cat/1997-zr-580-efi/",
       "destination": "/snowmobiles/arctic-cat/",
       "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-axys-850-pro-rmk-axys-155-2-75/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-axys-155-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-axys-850-pro-rmk-axys-155-3/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-axys-155-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-axys-850-pro-rmk-axys-163-3/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-axys-163-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-axys-850-pro-rmk-axys-165-2-75/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-axys-165-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-slash-850-pro-rmk-matryx-slash-155-2-75/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-matryx-slash-155-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-slash-850-pro-rmk-matryx-slash-155-3/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-matryx-slash-155-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-slash-850-pro-rmk-matryx-slash-163-3/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-matryx-slash-163-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-slash-patriot-boost-pro-rmk-matryx-slash-163-3/",
+      "destination": "/snowmobiles/polaris/2022-patriot-boost-pro-rmk-matryx-slash-163-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-slash-850-pro-rmk-matryx-slash-165-2-75/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-matryx-slash-165-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-slash-patriot-boost-pro-rmk-matryx-slash-165-2-75/",
+      "destination": "/snowmobiles/polaris/2022-patriot-boost-pro-rmk-matryx-slash-165-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-650-pro-rmk-matryx-155/",
+      "destination": "/snowmobiles/polaris/2022-650-pro-rmk-matryx-155/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-pro-rmk-matryx-850-pro-rmk-matryx-155/",
+      "destination": "/snowmobiles/polaris/2022-850-pro-rmk-matryx-155/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-axys-850-rmk-khaos-axys-155-2-75/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-axys-155-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-axys-850-rmk-khaos-axys-155-3/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-axys-155-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-axys-850-rmk-khaos-axys-163-3/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-axys-163-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-axys-850-rmk-khaos-axys-165-2-75/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-axys-165-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-matryx-850-rmk-khaos-matryx-155/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-matryx-155/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-matryx-slash-650-rmk-khaos-matryx-slash-146/",
+      "destination": "/snowmobiles/polaris/2022-650-rmk-khaos-matryx-slash-146/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-matryx-slash-850-rmk-khaos-matryx-slash-146/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-matryx-slash-146/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-matryx-slash-850-rmk-khaos-matryx-slash-155/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-matryx-slash-155/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-matryx-slash-patriot-boost-rmk-khaos-matryx-slash-155/",
+      "destination": "/snowmobiles/polaris/2022-patriot-boost-rmk-khaos-matryx-slash-155/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-matryx-slash-850-rmk-khaos-matryx-slash-163-3/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-matryx-slash-163-3/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-khaos-matryx-slash-850-rmk-khaos-matryx-slash-165-2-75/",
+      "destination": "/snowmobiles/polaris/2022-850-rmk-khaos-matryx-slash-165-2-75/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-evo-550-rmk-evo-144-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-rmk-evo-144-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-rmk-600-rmk-144/",
+      "destination": "/snowmobiles/polaris/2022-600-rmk-144/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-switchback-assault-650-switchback-assault-146-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-switchback-assault-146-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-switchback-assault-850-switchback-assault-146-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-switchback-assault-146-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-switchback-xc-650-switchback-xc-146-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-switchback-xc-146-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-switchback-xc-850-switchback-xc-146-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-switchback-xc-146-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-vr1-650-indy-vr1-129-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-indy-vr1-129-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-vr1-850-indy-vr1-129-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-indy-vr1-129-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-vr1-650-indy-vr1-137-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-indy-vr1-137-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-vr1-850-indy-vr1-137-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-indy-vr1-137-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xc-650-indy-xc-129-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-indy-xc-129-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xc-850-indy-xc-129-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-indy-xc-129-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xc-650-indy-xc-137-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-indy-xc-137-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xc-850-indy-xc-137-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-indy-xc-137-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-adventure-650-indy-adventure-137-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-indy-adventure-137-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-adventure-850-indy-adventure-137-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-indy-adventure-137-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-sp-600-indy-sp-129/",
+      "destination": "/snowmobiles/polaris/2022-600-indy-sp-129/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-sp-600-indy-sp-137/",
+      "destination": "/snowmobiles/polaris/2022-600-indy-sp-137/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xcr-650-indy-xcr-128-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-indy-xcr-128-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xcr-850-indy-xcr-128-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-indy-xcr-128-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xcr-650-indy-xcr-136-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-indy-xcr-136-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-xcr-850-indy-xcr-136-2022/",
+      "destination": "/snowmobiles/polaris/2022-850-indy-xcr-136-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-lxt-550-indy-lxt-144-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-indy-lxt-144-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-lxt-550-indy-lxt-northstar-edition-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-indy-lxt-northstar-edition-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-evo-550-indy-evo-121-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-indy-evo-121-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-550-indy-121/",
+      "destination": "/snowmobiles/polaris/2022-550-indy-121/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-550-indy-144/",
+      "destination": "/snowmobiles/polaris/2022-550-indy-144/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-adventure-550-indy-adventure-144-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-indy-adventure-144-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-indy-adventure-550-indy-adventure-155-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-indy-adventure-155-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-titan-xc-800-titan-xc-155/",
+      "destination": "/snowmobiles/polaris/2022-800-titan-xc-155/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-titan-adventure-800-titan-adventure-155-2022/",
+      "destination": "/snowmobiles/polaris/2022-800-titan-adventure-155-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-voyageur-650-voyageur-146-2022/",
+      "destination": "/snowmobiles/polaris/2022-650-voyageur-146-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-voyageur-550-voyageur-144-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-voyageur-144-2022/",
+      "permanent": true
+    },
+    {
+      "source": "/snowmobiles/polaris/2022-voyageur-550-voyageur-155-2022/",
+      "destination": "/snowmobiles/polaris/2022-550-voyageur-155-2022/",
+      "permanent": true
     }
   ]
 }
