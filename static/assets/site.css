@@ -32,6 +32,9 @@ h2{font:italic 800 1.65rem/1.1 var(--disp);letter-spacing:-.005em;margin:0 0 14p
 .mast-in{display:flex;align-items:center;justify-content:space-between;gap:12px 28px;flex-wrap:wrap;padding-top:14px;padding-bottom:6px}
 .logo{display:block;line-height:0}
 .logo img{height:44px;width:auto}
+.msearch{display:flex;gap:6px;flex:1 1 260px;max-width:380px}
+.msearch input{flex:1;min-width:0;font:500 .95rem var(--body);padding:0 12px;height:40px;border:0;border-radius:var(--r);background:#fff;color:var(--navy)}
+.msearch .btn{height:40px;padding:0 14px;font-size:.92rem}
 .mainnav{display:flex;flex-wrap:wrap;gap:2px 22px}
 .mainnav a{color:#dbe6ee;text-decoration:none;font-weight:600;padding:8px 0;border-bottom:2px solid transparent}
 .mainnav a:hover,.mainnav a[aria-current]{color:#fff;border-bottom-color:var(--orange)}

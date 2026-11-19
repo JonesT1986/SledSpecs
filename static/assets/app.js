@@ -23,14 +23,22 @@
         t = tools.querySelector('[data-filter="type"]'), sort = tools.querySelector("[data-sort]");
     var params = new URLSearchParams(location.search);
     var hero = document.getElementById("q");
-    if (params.get("q")) { if (q) q.value = params.get("q"); if (hero) hero.value = params.get("q"); }
+    /* "Ski-Doo", "skidoo" and "ski doo" should all match, same for E-TEC/etec, X-RS/xrs */
+    function norm(v) { return (v || "").toLowerCase().replace(/[-'’.\/]/g, ""); }
+    rows.forEach(function (r) { r._s = norm(r.dataset.search); });
+    function goToList() {
+      var cat = document.getElementById("catalogue") || table;
+      cat.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    }
+    var startQ = params.get("q");
+    if (startQ) { if (q) q.value = startQ; if (hero) hero.value = startQ; }
 
     function apply() {
-      var words = (q && q.value.trim().toLowerCase().split(/\s+/).filter(Boolean)) || [];
+      var words = (q && q.value.trim().split(/\s+/).map(norm).filter(Boolean)) || [];
       var shown = 0;
       rows.forEach(function (r) {
         var ok = (!b || !b.value || r.dataset.brand === b.value) && (!t || !t.value || r.dataset.type === t.value) &&
-          words.every(function (w) { return (r.dataset.search || "").indexOf(w) > -1; });
+          words.every(function (w) { return r._s.indexOf(w) > -1; });
         r.hidden = !ok; if (ok) shown++;
       });
       if (sort) {
@@ -43,18 +51,24 @@
       }
       if (count) count.textContent = shown === rows.length ? rows.length + " sleds" : "Showing " + shown + " of " + rows.length + " sleds";
       table.hidden = shown === 0;
-      if (empty) empty.hidden = shown !== 0;
+      if (empty) {
+        empty.hidden = shown !== 0;
+        if (shown === 0 && q && q.value.trim()) empty.textContent = "Nothing matches “" + q.value.trim() + "”. Try fewer words, a model name like Summit or RMK, an engine size like 850, or a belt number.";
+      }
     }
     [q, b, t, sort].forEach(function (el) { if (el) el.addEventListener(el.tagName === "INPUT" ? "input" : "change", apply); });
     if (hero && q) {
       hero.addEventListener("input", function () { q.value = hero.value; apply(); });
       hero.form.addEventListener("submit", function (e) {
-        e.preventDefault(); q.value = hero.value; apply();
-        history.replaceState(null, "", hero.value ? "?q=" + encodeURIComponent(hero.value) : location.pathname);
-        document.getElementById("catalogue").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        e.preventDefault();
+        if (!hero.value.trim()) { hero.focus(); return; }
+        q.value = hero.value; apply();
+        try { history.replaceState(null, "", "?q=" + encodeURIComponent(hero.value.trim()) + "#catalogue"); } catch (x) {}
+        goToList();
       });
     }
     apply();
+    if (startQ) goToList();
   });
 
   /* ---------- compare tray ---------- */

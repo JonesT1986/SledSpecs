@@ -15,6 +15,11 @@ SITE = "https://sledspecs.com"
 SITE_NAME = "SledSpecs"
 CONTACT_EMAIL = os.environ.get("SLEDSPECS_CONTACT_EMAIL", "").strip()  # empty = hide correction links
 TODAY = date.today().isoformat()
+import hashlib as _h
+def _ver(f):
+    try: return _h.md5(open(f,"rb").read()).hexdigest()[:10]
+    except OSError: return TODAY
+CSS_V, JS_V = _ver("static/assets/site.css"), _ver("static/assets/app.js")
 
 BRANDS = ["Ski-Doo", "Polaris", "Arctic Cat", "Yamaha"]
 TYPES = ["Mountain", "Trail", "Crossover", "Utility", "Vintage"]
@@ -235,7 +240,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:ital,wght@1,700;1,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v={TODAY}">
+<link rel="stylesheet" href="/assets/site.css?v={CSS_V}">
 {ld}
 </head>
 <body>
@@ -244,6 +249,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
   <div class="wrap mast-in">
     <a class="logo" href="/"><img src="/assets/logo-dark.webp" alt="SledSpecs.com home" width="628" height="112"></a>
     <nav class="mainnav" aria-label="Main">{nav}</nav>
+    {'' if hero else '<form class="msearch" action="/" method="get" role="search"><label class="sr" for="mq">Search sleds</label><input id="mq" name="q" type="search" placeholder="Search sleds or belt numbers" autocomplete="off"><button class="btn go" type="submit">Find specs</button></form>'}
   </div>
   {hero}
 </header>
@@ -276,7 +282,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
   <a class="btn go" id="trayGo" href="/compare/">Compare</a>
   <button class="btn ghost" id="trayClear" type="button">Clear</button>
 </div>
-<script src="/assets/app.js?v={TODAY}" defer></script>
+<script src="/assets/app.js?v={JS_V}" defer></script>
 </body>
 </html>
 """
