@@ -104,16 +104,6 @@
       }
     }
     [q, b, t, sort].forEach(function (el) { if (el) el.addEventListener(el.tagName === "INPUT" ? "input" : "change", apply); });
-    if (hero && q) {
-      hero.addEventListener("input", function () { q.value = hero.value; apply(); });
-      hero.form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        if (!hero.value.trim()) { hero.focus(); return; }
-        q.value = hero.value; apply();
-        try { history.replaceState(null, "", "?q=" + encodeURIComponent(hero.value.trim()) + "#catalogue"); } catch (x) {}
-        goToList();
-      });
-    }
     apply();
     if (startQ) goToList();
   });

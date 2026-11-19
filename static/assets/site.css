@@ -229,3 +229,20 @@ table{border-collapse:collapse;width:100%}
 .srcnotes{max-width:66ch;margin:10px 0 0;color:var(--slate);font-size:.95rem}
 .srcnotes summary{cursor:pointer;font-weight:600}
 .srcnotes p{margin:6px 0 0}
+
+/* search drop-down and results page */
+.has-sugg{position:relative}
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:60;background:#fff;color:var(--navy);border-radius:var(--r);box-shadow:0 14px 40px rgba(10,31,50,.28);max-height:min(70vh,520px);overflow-y:auto;overscroll-behavior:contain;text-align:left}
+.sugg-item{display:block;padding:10px 14px;text-decoration:none;color:var(--navy);border-top:1px solid #e6ecf0}
+.sugg-item:first-child,.sugg-note+.sugg-item{border-top:0}
+.sugg-item b{display:block;font-weight:700;font-size:1rem}
+.sugg-item span{display:block;font-size:.86rem;color:#5b6b78;margin-top:2px}
+.sugg-item:hover,.sugg-item.on{background:#fff1ea}
+.sugg .sugg-note,.hero .sugg .sugg-note{margin:0;max-width:none;line-height:1.4;padding:10px 14px;font-size:.9rem;color:#5b6b78;background:#f2f5f7}
+.sugg-all{display:block;padding:12px 14px;font-weight:700;color:var(--navy);background:#f2f5f7;text-decoration:underline}
+.srform{margin:8px 0 22px}
+.srnote{color:var(--slate);margin:0 0 14px}
+.srlist{list-style:none;margin:0;padding:0;border-top:1px solid #dbe3e9}
+.srlist li{padding:12px 2px;border-bottom:1px solid #dbe3e9}
+.srlist a{font-weight:700;font-size:1.05rem}
+.srlist span{display:block;font-size:.9rem;color:var(--slate);margin-top:2px}

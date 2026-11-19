@@ -19,7 +19,7 @@ import hashlib as _h
 def _ver(f):
     try: return _h.md5(open(f,"rb").read()).hexdigest()[:10]
     except OSError: return TODAY
-CSS_V, JS_V = _ver("static/assets/site.css"), _ver("static/assets/app.js")
+CSS_V, JS_V, SR_V = _ver("static/assets/site.css"), _ver("static/assets/app.js"), _ver("static/assets/search.js")
 
 BRANDS = ["Ski-Doo", "Polaris", "Arctic Cat", "Yamaha"]
 TYPES = ["Mountain", "Trail", "Crossover", "Utility", "Vintage"]
@@ -249,7 +249,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
   <div class="wrap mast-in">
     <a class="logo" href="/"><img src="/assets/logo-dark.webp" alt="SledSpecs.com home" width="628" height="112"></a>
     <nav class="mainnav" aria-label="Main">{nav}</nav>
-    {'' if hero else '<form class="msearch" action="/" method="get" role="search"><label class="sr" for="mq">Search sleds</label><input id="mq" name="q" type="search" placeholder="Search sleds or belt numbers" autocomplete="off"><button class="btn go" type="submit">Find specs</button></form>'}
+    {'' if hero else '<form class="msearch" action="/search/" method="get" role="search"><label class="sr" for="mq">Search sleds</label><input id="mq" name="q" type="search" placeholder="Search sleds or belt numbers" autocomplete="off"><button class="btn go" type="submit">Find specs</button></form>'}
   </div>
   {hero}
 </header>
@@ -283,6 +283,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
   <button class="btn ghost" id="trayClear" type="button">Clear</button>
 </div>
 <script src="/assets/app.js?v={JS_V}" defer></script>
+<script src="/assets/search.js?v={SR_V}" defer></script>
 </body>
 </html>
 """
@@ -404,7 +405,7 @@ def home(sleds):
     hero = f"""<div class="wrap hero">
   <h1>Snowmobile specs, model by model</h1>
   <p>Engine, horsepower, dry weight, track size and drive belt numbers for Ski-Doo, Polaris, Arctic Cat and Yamaha sleds, taken from factory spec sheets.</p>
-  <form class="find" action="/" method="get" role="search">
+  <form class="find" action="/search/" method="get" role="search">
     <label class="sr" for="q">Search sleds</label>
     <input id="q" name="q" type="search" placeholder="Try “Summit 165”, “850 RMK” or “3211216”" autocomplete="off">
     <button class="btn go" type="submit">Find specs</button>
@@ -862,6 +863,18 @@ def vs_index(pairs):
                 "Side-by-side factory spec comparisons of rival snowmobiles: horsepower, dry weight, track and drive belt.", body, jsonld=graph(ORG, c_ld), active="compare")
 
 
+def search_page():
+    body = """<section class="block"><h1 class="h1" id="srHead">Search snowmobile specs</h1>
+<form class="find srform" action="/search/" method="get" role="search">
+  <label class="sr" for="srq">Search sleds</label>
+  <input id="srq" name="q" type="search" placeholder="Try “Summit 165”, “850 RMK” or “3211216”" autocomplete="off">
+  <button class="btn go" type="submit">Find specs</button>
+</form>
+<div id="srOut"><noscript><p>Search needs JavaScript. <a href="/#catalogue">Browse every sled</a> instead.</p></noscript></div></section>"""
+    return page("/search/", "Search Snowmobile Specs | SledSpecs",
+                "Search factory snowmobile specs by model, engine size, track length or drive belt number.", body, noindex=True)
+
+
 def compare_page():
     c_html, _ = crumbs([("Home", "/"), ("Compare", "/compare/")])
     body = f"""{c_html}<section class="block"><h1 class="h1">Compare sleds</h1>
@@ -941,15 +954,18 @@ def main():
         u, html_ = vs_page(a, c); write(u, html_); urls.append((u, TODAY))
     write("/vs/", vs_index(pairs)); urls.append(("/vs/", TODAY))
     write("/compare/", compare_page())
+    write("/search/", search_page())
     write("/about/", about_page(sleds, corrections))
     write("/404.html", notfound())
 
     pub = [{k: s[k] for k in ("key", "full", "brand", "model", "year", "category", "engine", "cc", "hp", "dry_weight_lb",
                               "track", "track_length_in", "fuel_gal", "belt_pn", "lb_per_hp", "url")} for s in sleds]
     write("/assets/sleds.json", json.dumps(pub, separators=(",", ":")))
+    write("/assets/search.json", json.dumps([[s["full"], s["url"], s["category"], s["engine"] or "", s["track"] or "",
+                                              s["belt_pn"] or "", s["year"]] for s in sleds], ensure_ascii=False, separators=(",", ":")))
     write("/sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
           "".join(f"<url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls) + "</urlset>\n")
-    write("/robots.txt", f"User-agent: *\nAllow: /\nDisallow: /compare/\n\nSitemap: {SITE}/sitemap.xml\n")
+    write("/robots.txt", f"User-agent: *\nAllow: /\nDisallow: /compare/\nDisallow: /search/\n\nSitemap: {SITE}/sitemap.xml\n")
     write("/site.webmanifest", json.dumps({"name": "SledSpecs", "short_name": "SledSpecs", "start_url": "/",
                                            "display": "browser", "background_color": "#f2f5f7", "theme_color": "#0a1f32",
                                            "icons": [{"src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png"}]}))
