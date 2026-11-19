@@ -157,7 +157,7 @@ def mailto(subject):
 # ---------------------------------------------------------------- data
 def load():
     rows = list(csv.DictReader(open(os.path.join(ROOT, "data", "sleds.csv"), encoding="utf-8")))
-    sleds, seen, problems = [], set(), []
+    sleds, seen, problems, seen_urls = [], set(), [], set()
     for r in rows:
         s = {k: (v.strip() if isinstance(v, str) else v) for k, v in r.items()}
         for k, f in NUM.items():
@@ -179,7 +179,12 @@ def load():
             s["source"] = None
         s["brand_slug"] = slug(s["brand"])
         s["full"] = f"{s['year']} {s['brand']} {s['model']}"
-        s["url"] = f"/snowmobiles/{s['brand_slug']}/{s['year']}-{s['id']}/"
+        s["slug"] = f"{s['year']}-{clean_id(s['id'], s['year'])}"
+        s["old_url"] = f"/snowmobiles/{s['brand_slug']}/{s['year']}-{s['id']}/"
+        s["url"] = f"/snowmobiles/{s['brand_slug']}/{s['slug']}/"
+        if s["url"] in seen_urls:
+            problems.append("two sleds share the address " + s["url"])
+        seen_urls.add(s["url"])
         s["track"] = track_text(s)
         s["lb_per_hp"] = round(s["dry_weight_lb"] / s["hp"], 2) if s["hp"] and s["dry_weight_lb"] else None
         sleds.append(s)
@@ -187,6 +192,28 @@ def load():
         print("warning:", p, file=sys.stderr)
     sleds.sort(key=lambda s: (-s["year"], s["brand"], s["model"]))
     return sleds
+
+
+def clean_id(i, y):
+    """Tidy a sled id for its URL: drop a repeated year and model words said twice."""
+    y = str(y)
+    i = re.sub(r'^' + y + r'-', '', i); i = re.sub(r'-' + y + r'$', '', i)
+    t = i.split('-')
+    for n in range(4, 1, -1):          # only runs of 2+ words, e.g. indy-sport ... indy-sport
+        a = 0
+        while a <= len(t) - n:
+            seq = t[a:a+n]
+            if all(re.fullmatch(r'[a-z][a-z0-9]*', x) for x in seq):
+                for b in range(a + n, len(t) - n + 1):
+                    if t[b:b+n] == seq:
+                        t = t[:b] + t[b+n:]; break
+            a += 1
+    # single model word repeated after the engine size: voyageur-650-voyageur-146
+    if len(t) >= 3 and re.fullmatch(r'[a-z]{3,}', t[0]):
+        for b in range(1, len(t)):
+            if t[b] == t[0] and any(re.fullmatch(r'\d+r?', x) for x in t[1:b]):
+                t = t[:b] + t[b+1:]; break
+    return '-'.join(t)
 
 
 def track_text(s):
@@ -791,7 +818,7 @@ def vs_pairs(sleds):
 
 
 def vs_url(a, c):
-    return f"/vs/{a['key']}-vs-{c['key']}/"
+    return f"/vs/{a['slug']}-vs-{c['slug']}/"
 
 
 def vs_page(a, c):
@@ -969,6 +996,10 @@ def main():
     write("/site.webmanifest", json.dumps({"name": "SledSpecs", "short_name": "SledSpecs", "start_url": "/",
                                            "display": "browser", "background_color": "#f2f5f7", "theme_color": "#0a1f32",
                                            "icons": [{"src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png"}]}))
+    moves = [[s["old_url"], s["url"]] for s in sleds if s["old_url"] != s["url"]]
+    moves += [[f"/vs/{a['key']}-vs-{c['key']}/", vs_url(a, c)] for a, c in pairs if f"/vs/{a['key']}-vs-{c['key']}/" != vs_url(a, c)]
+    with open(os.path.join(ROOT, ".moves.json"), "w") as fh:  # old -> new addresses, merged into vercel.json by tools/redirects.py
+        json.dump(moves, fh)
     print(f"built {len(urls)} indexable pages for {len(sleds)} sleds -> dist/")
 
 
