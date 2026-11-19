@@ -56,6 +56,23 @@ def hp_gap(s, long=False):
     return "Not in our source" if long else "Not listed"
 
 
+def load_hp_class():
+    """Horsepower class the maker itself states when it publishes no rated figure (data/hp_class.csv)."""
+    path = os.path.join(ROOT, "data", "hp_class.csv")
+    if not os.path.exists(path):
+        return {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        return {(r["year"].strip(), r["brand"].strip(), r["id"].strip()): r["hp_class"].strip() for r in csv.DictReader(fh)}
+
+
+HP_CLASS = load_hp_class()
+
+
+def hp_class_text(s):
+    c = HP_CLASS.get((str(s["year"]), s["brand"], s["id"]))
+    return f"{s['brand']} describes it as a {c} hp class sled." if c and not s.get("hp") else ""
+
+
 def wt_gap(s, long=False):
     """Wording for a missing dry weight. Arctic Cat doesn't release weights for its 2026+ sleds."""
     if s["year"] >= 2026 and s["brand"] == "Arctic Cat":
@@ -618,13 +635,13 @@ def model_page(s, sleds):
                                       ("clutching", s["clutch"]), ("overall length", s["length_in"])] if not v]
     plate = "".join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in [
         ("Engine", f"{n(s['cc'])} cc"),
-        ("Power", hp or hp_gap(s)),
+        ("Power", hp or (hp_gap(s) + (f'<small class="hpc">{HP_CLASS[(str(s["year"]), s["brand"], s["id"])]} hp class</small>' if hp_class_text(s) else ""))),
         ("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else (wt_gap(s) or "—")),
         ("Track", f"{n(s['track_length_in'])} in" if s["track_length_in"] else "—"),
     ])
     engine = (row("Engine", e(s["engine"])) + row("Type", e(s["engine_detail"] or "")) +
               row("Displacement", f"{n(s['cc'])} cc") + row("Cylinders", n(s["cylinders"])) +
-              row("Horsepower", hp or hp_gap(s, long=True)) +
+              row("Horsepower", hp or (hp_gap(s, long=True) + (". " + hp_class_text(s) if hp_class_text(s) else ""))) +
               row("Power-to-weight", f"{s['lb_per_hp']} lb per hp" if s["lb_per_hp"] else None))
     drive = (row("Track", e(s["track"]) if s["track"] else None) + row("Track model", e(s["track_name"]) if s["track_name"] else None) +
              row("Drive belt", f'<a class="pn" href="{belt_url(s["belt_pn"])}">{e(s["belt_pn"])}</a>' if s["belt_pn"] else None) +
@@ -668,7 +685,8 @@ def model_page(s, sleds):
     qas = [(f"How much horsepower does the {nm} have?",
             f"The {nm} makes {n(s['hp'])} hp from its {e(s['engine'])} ({n(s['cc'])} cc)." if s["hp"] else
             (f"{e(s['brand'])} doesn't publish a horsepower figure for the {nm}." if hp_gap(s) == "Not published"
-             else f"Our source for the {nm} doesn't list horsepower.") + f" It uses the {e(s['engine'])}, {n(s['cc'])} cc.")]
+             else f"Our source for the {nm} doesn't list horsepower.") + (" " + hp_class_text(s) if hp_class_text(s) else "") +
+            f" It uses the {e(s['engine'])}, {n(s['cc'])} cc.")]
     if s["dry_weight_lb"]:
         qas.append((f"How much does the {nm} weigh?", f"The factory dry weight is {n(s['dry_weight_lb'])} lb, without fuel or oil."))
     if s["track"]:

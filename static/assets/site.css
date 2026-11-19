@@ -252,3 +252,4 @@ table{border-collapse:collapse;width:100%}
 .log th,.log td{overflow-wrap:anywhere}
 .log th:first-child,.log td:first-child{width:6.6em}
 .prose li,.prose p,.srcnotes{overflow-wrap:anywhere}
+.plate small.hpc{display:block;font-size:.8rem;font-weight:500;opacity:.8;margin-top:2px}
