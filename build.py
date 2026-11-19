@@ -158,6 +158,7 @@ def mailto(subject):
 def load():
     rows = list(csv.DictReader(open(os.path.join(ROOT, "data", "sleds.csv"), encoding="utf-8")))
     sleds, seen, problems, seen_urls = [], set(), [], set()
+    held_keys = load_holds()
     for r in rows:
         s = {k: (v.strip() if isinstance(v, str) else v) for k, v in r.items()}
         for k, f in NUM.items():
@@ -170,6 +171,10 @@ def load():
             problems.append("duplicate year+id " + key)
         seen.add(key)
         s["key"] = key
+        why = held_keys.get((str(s["year"]), s["brand"], s["id"])) or auto_hold_reason(s)
+        if why:
+            HELD.append((s["year"], s["brand"], s["model"], why))
+            continue
         if s["brand"] not in BRANDS:
             problems.append(f"{s['id']}: unknown brand {s['brand']}")
         if s["category"] not in TYPES:
@@ -214,6 +219,31 @@ def clean_id(i, y):
             if t[b] == t[0] and any(re.fullmatch(r'\d+r?', x) for x in t[1:b]):
                 t = t[:b] + t[b+1:]; break
     return '-'.join(t)
+
+
+# Sleds kept off the site until their figures are confirmed for that model year.
+# data/holds.csv lists them by hand; auto_hold_reason() catches research notes that say the
+# figures weren't confirmed (e.g. "verify before publishing", "spec table not yet captured").
+HELD = []
+AUTO_HOLD = [r"verify\b[^.;]*\bbefore publishing", r"availability\b[^.;]*\bnot confirmed",
+             r"spec table not yet captured", r"data captured is from a MY ?\d{4}",
+             r"carried from the [^.;]*family"]
+
+
+def load_holds():
+    path = os.path.join(ROOT, "data", "holds.csv")
+    if not os.path.exists(path):
+        return {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        return {(r["year"].strip(), r["brand"].strip(), r["id"].strip()): r["reason"] for r in csv.DictReader(fh)}
+
+
+def auto_hold_reason(s):
+    text = s.get("notes") or ""
+    for pat in AUTO_HOLD:
+        if re.search(pat, text, re.I):
+            return "research notes say the figures aren't confirmed for this model year"
+    return None
 
 
 def track_text(s):
@@ -1000,6 +1030,10 @@ def main():
     moves += [[f"/vs/{a['key']}-vs-{c['key']}/", vs_url(a, c)] for a, c in pairs if f"/vs/{a['key']}-vs-{c['key']}/" != vs_url(a, c)]
     with open(os.path.join(ROOT, ".moves.json"), "w") as fh:  # old -> new addresses, merged into vercel.json by tools/redirects.py
         json.dump(moves, fh)
+    with open(os.path.join(ROOT, ".held.json"), "w") as fh:
+        json.dump(HELD, fh, indent=1)
+    if HELD:
+        print(f"held back {len(HELD)} sled(s) until confirmed (see data/holds.csv and .held.json)")
     print(f"built {len(urls)} indexable pages for {len(sleds)} sleds -> dist/")
 
 
