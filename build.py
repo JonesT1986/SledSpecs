@@ -223,7 +223,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{canon}">
+{"" if path == "/404" else f'<link rel="canonical" href="{canon}">'}
 <meta name="robots" content="{robots}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{SITE_NAME}">

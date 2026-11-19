@@ -32,7 +32,7 @@ h2{font:italic 800 1.65rem/1.1 var(--disp);letter-spacing:-.005em;margin:0 0 14p
 .mast-in{display:flex;align-items:center;justify-content:space-between;gap:12px 28px;flex-wrap:wrap;padding-top:14px;padding-bottom:6px}
 .logo{display:block;line-height:0}
 .logo img{height:44px;width:auto}
-.msearch{display:flex;gap:6px;flex:1 1 260px;max-width:380px}
+.msearch{display:flex;gap:6px;flex:1 1 260px;max-width:380px;min-width:0}
 .msearch input{flex:1;min-width:0;font:500 .95rem var(--body);padding:0 12px;height:40px;border:0;border-radius:var(--r);background:#fff;color:var(--navy)}
 .msearch .btn{height:40px;padding:0 14px;font-size:.92rem}
 .mainnav{display:flex;flex-wrap:wrap;gap:2px 22px}
@@ -246,3 +246,9 @@ table{border-collapse:collapse;width:100%}
 .srlist li{padding:12px 2px;border-bottom:1px solid #dbe3e9}
 .srlist a{font-weight:700;font-size:1.05rem}
 .srlist span{display:block;font-size:.9rem;color:var(--slate);margin-top:2px}
+
+@media (max-width:760px){.msearch{flex:1 1 100%;max-width:none}}
+.log{width:100%;table-layout:fixed}
+.log th,.log td{overflow-wrap:anywhere}
+.log th:first-child,.log td:first-child{width:6.6em}
+.prose li,.prose p,.srcnotes{overflow-wrap:anywhere}
