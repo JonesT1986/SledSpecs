@@ -61,3 +61,4 @@ date,what,change
 2026-11-18,2026 650 Switchback XC weight,"Added the 2026 650 Switchback XC 146 estimated dry weight (497 lb) from its polaris.com spec page."
 2026-11-18,Restored drive belts,"Restored 48 drive belt numbers (Arctic Cat 8000, Polaris AXYS, 2021 INDY and TITAN Adventure) that were overwritten by a later catalogue upload built on an older copy of the file."
 2026-11-18,Ski-Doo turbo belts from BRP diagrams,"Added belts from BRP OEM drive-pulley diagrams for exact models: 2023 Expedition LE 900 ACE Turbo 24 in and 2025 Expedition SE 900 ACE Turbo (417300558), 2024 Summit X 850 E-TEC Turbo R 154 (417300571)."
+2026-11-18,1996 Polaris,"Added 29 1996 Polaris models from the factory 1996-1998 master repair manual. Six models (Indy 500 SKS, 500 EFI, 500 EFI SKS, 500 RMK, 500 EFI RMK, Classic, Ultra SKS) were left out because the scan's columns are jumbled for them."
