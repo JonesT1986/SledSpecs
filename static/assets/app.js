@@ -33,14 +33,61 @@
     var startQ = params.get("q");
     if (startQ) { if (q) q.value = startQ; if (hero) hero.value = startQ; }
 
-    function apply() {
-      var words = (q && q.value.trim().split(/\s+/).map(norm).filter(Boolean)) || [];
+    /* Typo help: words in the catalogue, used to correct "sumit" to "summit" or "artic" to "arctic" */
+    var vocab = null;
+    function buildVocab() {
+      var seen = {};
+      rows.forEach(function (r) { r._s.split(/\s+/).forEach(function (w) { if (w.length > 2 && !/^[\d.]+$/.test(w)) seen[w] = (seen[w] || 0) + 1; }); });
+      vocab = Object.keys(seen).map(function (w) { return [w, seen[w]]; });
+    }
+    function dist(a, c, max) {
+      if (Math.abs(a.length - c.length) > max) return max + 1;
+      var prev = [], cur, i, j, pp = null;
+      for (j = 0; j <= c.length; j++) prev[j] = j;
+      for (i = 1; i <= a.length; i++) {
+        cur = [i]; var low = i;
+        for (j = 1; j <= c.length; j++) {
+          var cost = a[i - 1] === c[j - 1] ? 0 : 1;
+          cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+          if (pp && i > 1 && j > 1 && a[i - 1] === c[j - 2] && a[i - 2] === c[j - 1]) cur[j] = Math.min(cur[j], pp[j - 2] + 1);
+          if (cur[j] < low) low = cur[j];
+        }
+        if (low > max) return max + 1;
+        pp = prev; prev = cur;
+      }
+      return prev[c.length];
+    }
+    function fix(w) {
+      if (w.length < 4 || /\d/.test(w)) return null;      /* never guess numbers: 850 is not 800 */
+      if (!vocab) buildVocab();
+      var max = w.length >= 6 ? 2 : 1, best = null, bd = max + 1, bn = 0;
+      vocab.forEach(function (v) {
+        var d = dist(w, v[0], max);
+        if (d === max + 1 && v[0].length > w.length) d = dist(w, v[0].slice(0, w.length), max); /* typo in a word still being typed */
+        if (d < bd || (d === bd && v[1] > bn)) { best = v[0]; bd = d; bn = v[1]; }
+      });
+      return bd <= max ? best : null;
+    }
+    function filter(words) {
       var shown = 0;
       rows.forEach(function (r) {
         var ok = (!b || !b.value || r.dataset.brand === b.value) && (!t || !t.value || r.dataset.type === t.value) &&
           words.every(function (w) { return r._s.indexOf(w) > -1; });
         r.hidden = !ok; if (ok) shown++;
       });
+      return shown;
+    }
+    function apply() {
+      var words = (q && q.value.trim().split(/\s+/).map(norm).filter(Boolean)) || [];
+      var shown = filter(words), fixed = null;
+      if (shown === 0 && words.length) {
+        var anyHit = function (w) { return rows.some(function (r) { return r._s.indexOf(w) > -1; }); };
+        var tried = words.map(function (w) { return anyHit(w) ? w : (fix(w) || w); });
+        if (tried.join(" ") !== words.join(" ")) {
+          var n = filter(tried);
+          if (n) { shown = n; fixed = tried.join(" "); } else filter(words);
+        }
+      }
       if (sort) {
         var k = sort.value, asc = (k === "weight" || k === "lbhp");
         var sorted = rows.slice().sort(function (x, y) {
@@ -49,7 +96,7 @@
         });
         sorted.forEach(function (r) { tbody.appendChild(r); });
       }
-      if (count) count.textContent = shown === rows.length ? rows.length + " sleds" : "Showing " + shown + " of " + rows.length + " sleds";
+      if (count) count.textContent = shown === rows.length ? rows.length + " sleds" : "Showing " + shown + " of " + rows.length + " sleds" + (fixed ? " for \u201c" + fixed + "\u201d (closest match to what you typed)" : "");
       table.hidden = shown === 0;
       if (empty) {
         empty.hidden = shown !== 0;
