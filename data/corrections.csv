@@ -64,3 +64,4 @@ date,what,change
 2026-11-18,1996 Polaris,"Added 29 1996 Polaris models from the factory 1996-1998 master repair manual. Six models (Indy 500 SKS, 500 EFI, 500 EFI SKS, 500 RMK, 500 EFI RMK, Classic, Ultra SKS) were left out because the scan's columns are jumbled for them."
 2026-11-18,1998 Polaris,"Added 10 1998 Polaris models from the factory 1996-1998 master repair manual; models whose columns are jumbled in the scan were left out."
 2026-11-18,Catalogue update,"Catalogue updated: 951 sourced sleds in total (2021-2026 Ski-Doo, plus Polaris, Arctic Cat and Yamaha), compiled from factory spec sheets and manuals, each row with its source. Lynx records held back until the site accepts the brand."
+2026-11-18,1999 Polaris,"Added 23 1999 Polaris models from the factory 1999 master repair manual, with track lug heights. The 600 and 700 RMK track lengths are garbled in the scan and left blank."
