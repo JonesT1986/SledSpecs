@@ -60,3 +60,4 @@ date,what,change
 2026-11-18,Polaris TITAN Adventure belts,"Added drive belts to 2021-2023 800 TITAN Adventure 155 (3211215) and 2023 ProStar S4 TITAN Adventure 155 (3212325) from Polaris help center article KA-02842."
 2026-11-18,2026 650 Switchback XC weight,"Added the 2026 650 Switchback XC 146 estimated dry weight (497 lb) from its polaris.com spec page."
 2026-11-18,Restored drive belts,"Restored 48 drive belt numbers (Arctic Cat 8000, Polaris AXYS, 2021 INDY and TITAN Adventure) that were overwritten by a later catalogue upload built on an older copy of the file."
+2026-11-18,Ski-Doo turbo belts from BRP diagrams,"Added belts from BRP OEM drive-pulley diagrams for exact models: 2023 Expedition LE 900 ACE Turbo 24 in and 2025 Expedition SE 900 ACE Turbo (417300558), 2024 Summit X 850 E-TEC Turbo R 154 (417300571)."
