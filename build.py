@@ -516,6 +516,7 @@ def home(sleds):
   </form>
   <p class="everyline"><b>Every snowmobile model ever built, in one place.</b> {len(sleds):,} sleds so far, from {min(s["year"] for s in sleds)} to {max(s["year"] for s in sleds)}, with more added every day. {missing_link()}</p>
   <div class="brandrow">{brands}</div>
+  <p class="herocredit">Photo: <a href="https://commons.wikimedia.org/wiki/File:SnowmobilesYellowstone.jpg" rel="noopener">National Park Service</a>, public domain</p>
 </div>"""
     faq, faq_ld = faq_block([
         ("Where do these snowmobile specs come from?",
@@ -659,6 +660,27 @@ def summary(s, nm):
     return f"The {e(nm)} {txt}."
 
 
+def load_photos():
+    """data/photos.csv: freely licensed photos for sled pages. Only add a photo after checking its licence.
+    Columns: year,brand,id,image,page,credit,license,caption"""
+    path = os.path.join(ROOT, "data", "photos.csv")
+    if not os.path.exists(path):
+        return {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        return {(r["year"].strip(), r["brand"].strip(), r["id"].strip()): r for r in csv.DictReader(fh) if r.get("image")}
+
+
+PHOTOS = load_photos()
+
+
+def photo_block(s):
+    p = PHOTOS.get((str(s["year"]), s["brand"], s["id"]))
+    if not p:
+        return ""
+    return (f'<figure class="sledphoto"><img src="{e(p["image"])}" alt="{e(p["caption"])}" loading="lazy" decoding="async">'
+            f'<figcaption>{e(p["caption"])}. Photo: <a href="{e(p["page"])}" rel="noopener">{e(p["credit"])}</a>, {e(p["license"])}.</figcaption></figure>')
+
+
 def model_page(s, sleds):
     def row(k, v):
         return f"<tr><th scope=row>{k}</th><td>{v}</td></tr>" if v not in (None, "", "—") else ""
@@ -748,6 +770,7 @@ def model_page(s, sleds):
     {note}
   </header>
   <dl class="plate">{plate}</dl>
+  {photo_block(s)}
   <div class="model-grid">
     <div class="specs">{tables}
       <div class="srcbox">{src}{gaps}</div>

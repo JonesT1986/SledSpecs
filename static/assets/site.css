@@ -275,3 +275,11 @@ table{border-collapse:collapse;width:100%}
 .cards b{display:block;font-size:1.02rem;margin:2px 0 4px}
 .cards .cd{display:block;font-size:.85rem;color:var(--slate)}
 .more{margin-top:16px}
+
+/* homepage banner photo (NPS, public domain) */
+.mast:has(.hero){background:linear-gradient(180deg,rgba(10,31,50,.80) 0%,rgba(10,31,50,.88) 55%,rgba(10,31,50,.97) 100%),url("https://commons.wikimedia.org/wiki/Special:FilePath/SnowmobilesYellowstone.jpg?width=1600") center 60%/cover no-repeat var(--navy,#0a1f32)}
+.hero .herocredit{margin:14px 0 0;font-size:.75rem;color:#9fb3c2}
+.hero .herocredit a{color:#c7d6e1}
+.sledphoto{margin:18px 0}
+.sledphoto img{width:100%;max-height:440px;object-fit:cover;border-radius:var(--r);display:block;background:#dbe3e9}
+.sledphoto figcaption{font-size:.82rem;color:var(--slate);margin-top:6px}
