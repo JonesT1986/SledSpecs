@@ -162,8 +162,8 @@ def parts_box(s):
                   ("Chaincase and gear oil", f"{br} snowmobile chaincase oil"),
                   ("Track studs and backers", "snowmobile track studs backers")]
     lis = "".join(f'<li><a href="{amz(q)}" rel="sponsored nofollow noopener" target="_blank">{e(label)}</a></li>' for label, q in items)
-    return (f'<section class="parts"><h2>Parts and supplies</h2><p class="small">Amazon.ca searches matched to the {e(s["year"])} {e(br)} {e(s["model"])}. '
-            f'Check fitment against your owner\'s manual before ordering. As an Amazon Associate, SledSpecs earns from qualifying purchases.</p>'
+    return (f'<section class="parts"><h2>Parts and supplies</h2><p class="small">Matched to the {e(s["year"])} {e(br)} {e(s["model"])}. '
+            f'Check fitment against your owner\'s manual before ordering.</p>'
             f'<ul class="parts-list">{lis}</ul></section>')
 
 
@@ -360,7 +360,7 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
   <div class="wrap foot-in">
     <div>
       <img class="foot-logo" src="/assets/logo-dark.webp" alt="SledSpecs" width="157" height="28" loading="lazy">
-      <p>Factory snowmobile specs, belt and track fitment, gathered from manufacturer spec sheets and owner's manuals. Every figure names its source.</p>{('<p class="small">As an Amazon Associate, SledSpecs earns from qualifying purchases. Belt links go to Amazon.ca.</p>') if AMAZON_TAG else ''}
+      <p>Factory snowmobile specs, belt and track fitment, gathered from manufacturer spec sheets and owner's manuals. Every figure names its source.</p>{('<p class="small">As an Amazon Associate, SledSpecs earns from qualifying purchases.</p>') if AMAZON_TAG else ''}
     </div>
     <div>
       <h2>Brands</h2>
@@ -736,7 +736,7 @@ def model_page(s, sleds):
             side += "<p>Also fits:</p><ul>" + "".join(f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in same_belt[:8]) + "</ul>"
             if len(same_belt) > 8:
                 side += f'<p class="small"><a href="{belt_url(s["belt_pn"])}">See all {len(same_belt) + 1} sleds that use the {e(s["belt_pn"])}</a></p>'
-        side += '<p class="small">Confirm the part number with your dealer before ordering.' + (' As an Amazon Associate, SledSpecs earns from qualifying purchases.' if AMAZON_TAG else '') + '</p></div>'
+        side += '<p class="small">Confirm the part number with your dealer before ordering.' + '</p></div>'
     side += f'<button class="btn go wide" type="button" data-compare="{s["key"]}" aria-pressed="false">Add to compare</button>'
     if VS.get(s["key"]):
         side += '<div class="rel"><h2>Compare with rivals</h2><ul>' + "".join(
@@ -878,7 +878,7 @@ def part_page(kind, pn, group):
             f"from {span}, including the {e(join_and(fams[:6]))} {'line' if len(fams[:6]) == 1 else 'lines'} with the {e(join_and([x.replace('Rotax ', '') for x in engines[:4]]))} engine{'s' if len(engines) > 1 else ''}.")
     rows = "".join(f'<tr><td>{x["year"]}</td><th scope=row class="m"><a href="{x["url"]}">{e(x["brand"])} {e(x["model"])}</a></th><td>{e(x["engine"] or "")}</td></tr>' for x in group)
     btn = (f'<a class="btn buy" href="{amz(q)}" rel="sponsored nofollow noopener" target="_blank">Check {e(pn)} price on Amazon</a>'
-           f'<p class="small">As an Amazon Associate, SledSpecs earns from qualifying purchases. Confirm the part number with your dealer before ordering.</p>') if AMAZON_TAG else ""
+           f'<p class="small">Confirm the part number with your dealer before ordering.</p>') if AMAZON_TAG else ""
     c_html, c_ld = crumbs([("Home", "/"), ("Parts", "/parts/"), (what, url)])
     qas = [(f"What snowmobiles use the {what}?", f"{len(group)} sleds in our catalogue list it, from {span}: " + ", ".join(f"{x['year']} {x['brand']} {x['model']}" for x in group[:8]) + (" and more." if len(group) > 8 else ".")),
            (f"Where does the {pn} number come from?", src)]
