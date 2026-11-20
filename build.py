@@ -6,7 +6,7 @@ Edit data/sleds.csv (one row per sled) and data/corrections.csv, then run:
 Output goes to dist/. No third-party packages needed (Vercel runs this on every push).
 Set the SLEDSPECS_CONTACT_EMAIL environment variable to choose where "send a correction" links go.
 """
-import collections, csv, json, html, os, re, shutil, sys
+import collections, csv, json, html, os, random, re, shutil, sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -397,6 +397,18 @@ def crumbs(items):
 
 
 # ---------------------------------------------------------------- catalogue table
+def missing_link():
+    if not CONTACT_EMAIL:
+        return ""
+    return f'Don\'t see your sled? <a href="{mailto("Missing sled for SledSpecs")}">Let us know</a>.'
+
+
+def sled_card(s):
+    bits = [x for x in (s.get("engine"), s.get("track"), ("belt " + s["belt_pn"]) if s.get("belt_pn") else None) if x]
+    return (f'<li><a href="{s["url"]}"><span class="cy">{s["year"]} {e(s["brand"])}</span>'
+            f'<b>{e(s["model"])}</b><span class="cd">{e(", ".join(bits))}</span></a></li>')
+
+
 def cat_table(sleds, caption, filters=True, table_id="cat"):
     rows = []
     for s in sleds:
@@ -502,6 +514,7 @@ def home(sleds):
     <input id="q" name="q" type="search" placeholder="Try “Summit 165”, “850 RMK” or “3211216”" autocomplete="off">
     <button class="btn go" type="submit">Find specs</button>
   </form>
+  <p class="everyline"><b>Every snowmobile model ever built, in one place.</b> {len(sleds):,} sleds so far, from {min(s["year"] for s in sleds)} to {max(s["year"] for s in sleds)}, with more added every day. {missing_link()}</p>
   <div class="brandrow">{brands}</div>
 </div>"""
     faq, faq_ld = faq_block([
@@ -514,17 +527,20 @@ def home(sleds):
         ("How do I find the right drive belt for my sled?",
          'Open your sled\'s page or use the <a href="/belt-finder/">belt finder</a>. Belt numbers are listed only when the owner\'s manual or factory parts data states them. Confirm with your dealer before ordering.'),
     ], "Common questions")
+    picks = random.Random(TODAY).sample(sleds, min(20, len(sleds)))
+    cards = "".join(sled_card(s) for s in sorted(picks, key=lambda s: (-s["year"], s["brand"], s["model"])))
     body = news_box(load_news()) + f"""
 <section class="block" id="catalogue">
-  <h2>All sleds</h2>
-  {cat_table(sleds, "Factory figures for every sled in the catalogue.", table_id="cat")}
+  <div class="newshead"><h2>20 sleds from the catalogue</h2><button class="btn ghost small" type="button" id="reshuffle">Show 20 different sleds</button></div>
+  <ul class="cards" id="sledCards">{cards}</ul>
+  <p class="more"><a class="btn go" href="/snowmobiles/">Browse all {len(sleds):,} sleds by brand</a> or search above for any model, engine size or belt number.</p>
 </section>
 <section class="block two">
   <div><h2>Standouts</h2><ul class="leaders">{leaders}</ul></div>
   <div><h2>Browse by type</h2><ul class="types">{types_list(sleds)}</ul></div>
 </section>
 {faq}"""
-    ld = graph(ORG, WEBSITE, itemlist(sleds, "Snowmobile specifications"), faq_ld)
+    ld = graph(ORG, WEBSITE, itemlist(picks, "Snowmobile specifications"), faq_ld)
     return page("/", "Snowmobile Specs: Engine, HP, Weight, Track & Belt | SledSpecs",
                 f"Factory snowmobile specs for {len(sleds)} sleds from Ski-Doo, Polaris, Arctic Cat and Yamaha: horsepower, dry weight, track size, fuel capacity and drive belt part numbers.",
                 body, jsonld=ld, hero=hero)
@@ -963,7 +979,7 @@ def search_page():
   <input id="srq" name="q" type="search" placeholder="Try “Summit 165”, “850 RMK” or “3211216”" autocomplete="off">
   <button class="btn go" type="submit">Find specs</button>
 </form>
-<div id="srOut"><noscript><p>Search needs JavaScript. <a href="/#catalogue">Browse every sled</a> instead.</p></noscript></div></section>"""
+<div id="srOut"><noscript><p>Search needs JavaScript. <a href="/snowmobiles/">Browse every sled</a> instead.</p></noscript></div></section>"""
     return page("/search/", "Search Snowmobile Specs | SledSpecs",
                 "Search factory snowmobile specs by model, engine size, track length or drive belt number.", body, noindex=True)
 

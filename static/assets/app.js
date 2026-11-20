@@ -148,7 +148,7 @@
     loadData(function (d) {
       var ms = ids.map(function (id) { return d.filter(function (x) { return x.key === id; })[0]; }).filter(Boolean);
       if (ms.length < 2) {
-        out.innerHTML = '<p>You have ' + ms.length + ' sled' + (ms.length === 1 ? "" : "s") + ' picked. <a href="/#catalogue">Go to the catalogue</a> and tap Compare on two or three sleds.</p>';
+        out.innerHTML = '<p>You have ' + ms.length + ' sled' + (ms.length === 1 ? "" : "s") + ' picked. <a href="/snowmobiles/">Go to the catalogue</a> and tap Compare on two or three sleds.</p>';
         return;
       }
       document.getElementById("cmpLede").textContent = "Highlighted cells mark the strongest figure in each row. A dash means the figure isn't on file.";

@@ -198,7 +198,7 @@
       if (r.ignored.length) note += "Not found anywhere in the catalogue: " + r.ignored.map(function (w) { return "“" + esc(w) + "”"; }).join(", ") + ".";
       if (!hits.length) {
         out.innerHTML = (note ? '<p class="srnote">' + note + "</p>" : "") +
-          '<p class="lede">Try fewer words, a model name like Summit, RMK or Riot, an engine size like 850, or a belt number. Or <a href="/#catalogue">browse every sled</a>.</p>';
+          '<p class="lede">Try fewer words, a model name like Summit, RMK or Riot, an engine size like 850, or a belt number. Or <a href="/snowmobiles/">browse every sled</a>.</p>';
         return;
       }
       out.innerHTML = (note ? '<p class="srnote">' + note + "</p>" : "") + '<ol class="srlist">' + hits.map(function (s) {
@@ -206,4 +206,28 @@
       }).join("") + "</ol>" + (r.hits.length > hits.length ? '<p class="srnote">Showing the closest ' + hits.length + ". Add a year or engine size to narrow it down.</p>" : "");
     });
   }
+})();
+
+/* Homepage: "Show 20 different sleds" picks 20 random sleds from the search index. */
+(function () {
+  var btn = document.getElementById("reshuffle"), list = document.getElementById("sledCards");
+  if (!btn || !list) return;
+  var rows = null;
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function draw() {
+    var pick = rows.slice();
+    for (var i = pick.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = pick[i]; pick[i] = pick[j]; pick[j] = t; }
+    pick = pick.slice(0, 20).sort(function (a, b) { return b[6] - a[6] || (a[0] < b[0] ? -1 : 1); });
+    list.innerHTML = pick.map(function (r) {
+      var m = String(r[0]).match(/^(\d{4}) (Ski-Doo|Polaris|Arctic Cat|Yamaha) (.*)$/) || [null, r[6], "", r[0]];
+      var bits = [r[3], r[4], r[5] ? "belt " + r[5] : ""].filter(Boolean).join(", ");
+      return '<li><a href="' + esc(r[1]) + '"><span class="cy">' + esc(m[1] + " " + m[2]) + "</span><b>" + esc(m[3]) + '</b><span class="cd">' + esc(bits) + "</span></a></li>";
+    }).join("");
+  }
+  btn.addEventListener("click", function () {
+    if (rows) return draw();
+    btn.disabled = true;
+    fetch("/assets/search.json").then(function (r) { return r.json(); }).then(function (d) { rows = d; btn.disabled = false; draw(); })
+      .catch(function () { btn.disabled = false; });
+  });
 })();
