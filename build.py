@@ -172,8 +172,25 @@ def mailto(subject):
 
 
 # ---------------------------------------------------------------- data
+def load_overrides():
+    """data/overrides.csv: verified corrections applied on every build, so an upload of an old
+    copy of sleds.csv can't undo them. Columns: year,brand,id,field,value,reason. Empty value clears."""
+    path = os.path.join(ROOT, "data", "overrides.csv")
+    out = collections.defaultdict(dict)
+    if os.path.exists(path):
+        with open(path, newline="", encoding="utf-8") as fh:
+            for r in csv.DictReader(fh):
+                out[(r["year"].strip(), r["brand"].strip(), r["id"].strip())][r["field"].strip()] = r["value"]
+    return out
+
+
 def load():
     rows = list(csv.DictReader(open(os.path.join(ROOT, "data", "sleds.csv"), encoding="utf-8")))
+    ovr = load_overrides()
+    for r in rows:
+        for f, v in ovr.get((r["year"].strip(), r["brand"].strip(), r["id"].strip()), {}).items():
+            if f in r:
+                r[f] = v
     sleds, seen, problems, seen_urls = [], set(), [], set()
     held_keys = load_holds()
     for r in rows:

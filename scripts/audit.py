@@ -115,8 +115,23 @@ def audit(rows, only=None):
     return out
 
 
+def apply_overrides(rows):
+    """Apply data/overrides.csv the same way build.py does, so the audit sees what the site shows."""
+    try:
+        with open(f"{ROOT}/data/overrides.csv", newline="", encoding="utf-8") as fh:
+            ovr = list(csv.DictReader(fh))
+    except FileNotFoundError:
+        return rows
+    idx = {(r["year"], r["brand"], r["id"]): r for r in rows}
+    for o in ovr:
+        r = idx.get((o["year"], o["brand"], o["id"]))
+        if r is not None and o["field"] in r:
+            r[o["field"]] = o["value"]
+    return rows
+
+
 def main():
-    rows = rows_at()
+    rows = apply_overrides(rows_at())
     only = None
     if "--since" in sys.argv:
         rev = sys.argv[sys.argv.index("--since") + 1]

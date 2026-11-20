@@ -1,0 +1,30 @@
+year,brand,id,field,value,reason
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,length_in,125,2026 polaris.com spec page
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,lug_in,1.6,2026 polaris.com spec page
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,track_name,Cobra,2026 polaris.com spec page
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,notes,"Dry weight 472 lb, 11.5 gal, 125 in long and 15 x 146 x 1.6 Cobra track confirmed on the 2026 polaris.com spec page for the 650 Voyageur SP 146.",verified 2026-11-19
+2026,Polaris,voyageur-550-voyageur-144,notes,"Listed for MY2026 in the 2026 550 PRO-RIDE Owner's Manual (publications.polaris.com). Dry weight not yet confirmed for 2026, so left blank.",verified 2026-11-19
+2026,Polaris,switchback-xc-850-switchback-xc-146,dry_weight_lb,,497 lb only confirmed for 2027
+2026,Polaris,switchback-xc-850-switchback-xc-146,lug_in,1.352,Polaris-fed 2026 dealer spec data
+2026,Polaris,switchback-xc-850-switchback-xc-146,track_name,Cobra,Polaris-fed 2026 dealer spec data
+2026,Polaris,switchback-xc-850-switchback-xc-146,notes,"2026 track (15 x 146 x 1.352 Cobra) and 125 in length from Polaris-fed 2026 dealer spec data. Dry weight left blank: 497 lb appears only on the 2027 page, not confirmed for 2026.",verified 2026-11-19
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,length_in,,"copied from 2025, not confirmed for 2026"
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,lug_in,1.35,Polaris-fed 2026 dealer spec data
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,track_name,Cobra,Polaris-fed 2026 dealer spec data
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,notes,"2026 dry weight 636 lb and 15 x 137 x 1.35 Cobra track from Polaris-fed 2026 dealer spec data (2026 polaris.com spec page exists). Overall length not confirmed for 2026, left blank.",verified 2026-11-19
+2026,Polaris,rmk-khaos-850-rmk-khaos-146,length_in,122.8,Polaris-fed 2026 dealer spec data
+2026,Polaris,rmk-khaos-850-rmk-khaos-146,notes,"2026 dry weight 426 lb and 122.8 in length from Polaris-fed 2026 dealer spec data, matching the 850 RMK owner's manual (Khaos 146/155: 426 lb). The original DX1 brochure link now returns 404.",verified 2026-11-19
+2026,Arctic Cat,riot-9000-atac-eps-es,track_name,,copied from prior year
+1994,Yamaha,vmax-4-800-st,belt_pn,,"field held text, not a part number"
+2019,Yamaha,srviper-l-tx,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-l-tx-dx,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-l-tx-se,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-l-tx-le,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-r-tx-dx,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-r-tx-se,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-x-tx-se-141,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-b-tx-le,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-s-tx-dx-137,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-s-tx-dx-146,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-m-tx-se-153,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-m-tx-se-162,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
