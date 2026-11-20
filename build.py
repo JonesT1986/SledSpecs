@@ -288,7 +288,8 @@ def page(path, title, desc, body, *, jsonld=None, noindex=False, active=None, he
     nav = "".join(
         f'<a href="{u}"{" aria-current=page" if active == k else ""}>{t}</a>'
         for k, u, t in [("brands", "/snowmobiles/", "Brands"), ("belts", "/belt-finder/", "Belt finder"),
-                        ("compare", "/compare/", "Compare"), ("about", "/about/", "About the data")])
+                        ("compare", "/compare/", "Compare"), ("news", "/news/", "News"),
+                        ("about", "/about/", "About the data")])
     robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large"
     return f"""<!doctype html>
 <html lang="en">
@@ -496,7 +497,7 @@ def home(sleds):
         ("How do I find the right drive belt for my sled?",
          'Open your sled\'s page or use the <a href="/belt-finder/">belt finder</a>. Belt numbers are listed only when the owner\'s manual or factory parts data states them. Confirm with your dealer before ordering.'),
     ], "Common questions")
-    body = f"""
+    body = news_box(load_news()) + f"""
 <section class="block" id="catalogue">
   <h2>All sleds</h2>
   {cat_table(sleds, "Factory figures for every sled in the catalogue.", table_id="cat")}
@@ -960,6 +961,67 @@ def compare_page():
                 noindex=True, active="compare")
 
 
+# ---------- sled news (data/news.csv, refreshed daily by a scheduled research task) ----------
+NEWS_CATS = ["New models", "Reviews", "Racing", "Recalls", "Vintage", "Trails and clubs", "Industry"]
+
+
+def load_news():
+    path = os.path.join(ROOT, "data", "news.csv")
+    if not os.path.exists(path):
+        return []
+    with open(path, newline="", encoding="utf-8") as fh:
+        items = [r for r in csv.DictReader(fh) if r.get("url", "").startswith("http") and r.get("title")]
+    seen, out = set(), []
+    for r in sorted(items, key=lambda r: r["date"], reverse=True):
+        if r["url"] in seen:
+            continue
+        seen.add(r["url"]); out.append(r)
+    return out
+
+
+def news_date(d):
+    try:
+        y, m, dd = (int(x) for x in d.split("-"))
+        return f"{date(y, m, dd):%b} {dd}, {y}"
+    except ValueError:
+        return e(d)
+
+
+def news_item(r, short=False):
+    return (f'<li data-cat="{e(slug(r["category"]))}"><a href="{e(r["url"])}" target="_blank" rel="noopener">{e(r["title"])}</a>'
+            f'<span class="nmeta">{e(r["source"])}, {news_date(r["date"])} · {e(r["category"])}</span>'
+            + ("" if short else f'<p>{e(r["summary"])}</p>') + "</li>")
+
+
+def news_box(news):
+    if not news:
+        return ""
+    return (f'<section class="block newsbox"><div class="newshead"><h2>Latest sled news</h2>'
+            f'<a href="/news/">All sled news</a></div><ul class="newslist short">'
+            + "".join(news_item(r, short=True) for r in news[:5]) + "</ul></section>")
+
+
+def news_page(news):
+    cats = [c for c in NEWS_CATS if any(r["category"] == c for r in news)] + \
+           sorted({r["category"] for r in news} - set(NEWS_CATS))
+    chips = '<button type="button" class="chip on" data-ncat="">All</button>' + "".join(
+        f'<button type="button" class="chip" data-ncat="{e(slug(c))}">{e(c)}</button>' for c in cats)
+    body = f"""<section class="block"><h1 class="h1">Snowmobile news</h1>
+<p class="lede">New models, reviews, racing, recalls, vintage shows and trail news from around the sled world, newest first. Each link opens the original story.</p>
+<div class="chips" role="group" aria-label="Filter news by topic">{chips}</div>
+<ul class="newslist" id="newsList">{"".join(news_item(r) for r in news)}</ul>
+<p class="small">Updated daily. SledSpecs links to these stories and isn't affiliated with the publishers.</p></section>
+<script>(function(){{var b=document.querySelectorAll("[data-ncat]"),l=document.querySelectorAll("#newsList li");
+b.forEach(function(x){{x.addEventListener("click",function(){{var c=x.getAttribute("data-ncat");b.forEach(function(y){{y.classList.toggle("on",y===x)}});
+l.forEach(function(li){{li.hidden=!!c&&li.getAttribute("data-cat")!==c}})}})}})}})();</script>"""
+    ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "Snowmobile news", "url": SITE + "/news/",
+          "mainEntity": {"@type": "ItemList", "itemListElement": [
+              {"@type": "ListItem", "position": i + 1, "url": r["url"], "name": r["title"]} for i, r in enumerate(news[:50])]}}
+    return page("/news/", "Snowmobile News: New Models, Racing, Recalls & Vintage | SledSpecs",
+                "Latest snowmobile news: new Ski-Doo, Polaris and Arctic Cat models, reviews, snocross racing, recalls, vintage sled shows and trail updates.",
+                body, jsonld=ld, active="news")
+
+
 def about_page(sleds, corrections):
     srcs = sorted({s["source"] for s in sleds if s["source"]})
     log = "".join(f"<tr><td>{e(c['date'])}</td><td>{e(c['what'])}</td><td>{e(c['change'])}</td></tr>" for c in reversed(corrections))
@@ -1029,6 +1091,7 @@ def main():
         u, html_ = vs_page(a, c); write(u, html_); urls.append((u, TODAY))
     write("/vs/", vs_index(pairs)); urls.append(("/vs/", TODAY))
     write("/compare/", compare_page())
+    write("/news/", news_page(load_news())); urls.append(("/news/", TODAY))
     write("/search/", search_page())
     write("/about/", about_page(sleds, corrections))
     write("/404.html", notfound())
