@@ -15,10 +15,10 @@ CURRENT_MY = 2027                      # newest model year that can exist
 
 UNCONFIRMED = [r"verify\b[^.;]*\bbefore publishing", r"availability\b[^.;]*\bnot confirmed",
                r"spec table not yet captured", r"data captured is from a MY ?\d{4}",
-               r"carried from the [^.;]*family", r"(?<!not )\bassumed\b", r"\bestimated? by\b",
+               r"carried from the [^.;]*family", r"(?<!not )(?<!than )\bassumed\b", r"\bestimated? by\b",
                r"\bapprox(?:imately)?\b", r"\btypical(?:ly)?\b", r"\bprobably\b", r"\bshould be\b"]
 BELT = {"Polaris": r"^32\d{5}$|^3211\d{3}$|^3212\d{3}$|^32\d{5}$",
-        "Ski-Doo": r"^4173\d{5}$|^4150\d{5}$|^4140\d{5}$|^4176\d{5}$",
+        "Ski-Doo": r"^4173\d{5}$|^4150\d{5}$|^4140\d{5}$|^4176\d{5}$|^605 ?\d{3} ?\d{3}$|^41[4-7]\d{6}$",
         "Arctic Cat": r"^0\d{3}-\d{3}$",
         "Yamaha": r"^[0-9A-Z]{3}-[0-9]{5}-[0-9]{2}(-00)?$"}
 RANGE = {"dry_weight_lb": (60, 900), "track_length_in": (40, 180), "track_width_in": (8, 25),
@@ -101,7 +101,8 @@ def audit(rows, only=None):
             out["FIX"].append((lab, f"name says {mt[-1]} in track but track_length_in is {r['track_length_in']}"))
         cc = num(r.get("cc"))
         me = re.search(r"\b(120|200|250|340|400|440|500|550|600|650|700|800|850|900|1000)\b", r["model"])
-        if cc and me and r["year"].isdigit() and int(r["year"]) >= 2000:
+        tl0 = num(r.get("track_length_in"))
+        if cc and me and r["year"].isdigit() and int(r["year"]) >= 2000 and not (tl0 and abs(tl0 - int(me.group(1))) < 2):
             want = int(me.group(1))
             if not (0.6 * want <= cc <= 1.25 * want):
                 out["CHECK"].append((lab, f"name says {want} but cc is {r['cc']}"))
@@ -110,7 +111,7 @@ def audit(rows, only=None):
             out["FIX"].append((lab, f"belt_pn holds text, not a part number: {b!r}"))
         elif b and r["brand"] in BELT and not re.match(BELT[r["brand"]], b):
             out["CHECK"].append((lab, f"belt number {b} doesn't look like a {r['brand']} part number"))
-        if num(r.get("hp")) and r["brand"] in ("Polaris", "Yamaha") and y.isdigit() and int(y) >= 2010:
+        if num(r.get("hp")) and not (re.search(r"SR ?Viper", r["model"], re.I) and num(r.get("hp")) == 125) and r["brand"] in ("Polaris", "Yamaha") and y.isdigit() and int(y) >= 2010:
             out["CHECK"].append((lab, f"{r['brand']} rarely publishes hp; confirm {r['hp']} hp is from a factory source"))
     return out
 

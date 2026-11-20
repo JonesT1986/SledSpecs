@@ -69,7 +69,7 @@ HP_CLASS = load_hp_class()
 
 
 def hp_class_text(s):
-    c = HP_CLASS.get((str(s["year"]), s["brand"], s["id"]))
+    c = HP_CLASS.get((str(s["year"]), s["brand"], s["id"])) or s.get("_hp_class")
     return f"{s['brand']} describes it as a {c} hp class sled." if c and not s.get("hp") else ""
 
 
@@ -194,6 +194,14 @@ def load():
     sleds, seen, problems, seen_urls = [], set(), [], set()
     held_keys = load_holds()
     for r in rows:
+        # Yamaha markets every SRViper as a "125HP class" sled and publishes no rated figure, so a 125 in the
+        # hp column is that class label: show it as such, never as a rated horsepower.
+        if r.get("brand") == "Yamaha" and re.search(r"SR ?Viper", r.get("model", ""), re.I) and (r.get("hp") or "").strip() in ("125", "125.0"):
+            r["hp"] = ""
+            r["_hp_class"] = "125"
+        # older BRP belt numbers are printed with spaces (605 348 425): store as one number so search finds them
+        if r.get("belt_pn") and re.fullmatch(r"\d{3}( \d{3}){2}", r["belt_pn"].strip()):
+            r["belt_pn"] = r["belt_pn"].replace(" ", "")
         s = {k: (v.strip() if isinstance(v, str) else v) for k, v in r.items()}
         for k, f in NUM.items():
             s[k] = f(s[k]) if s.get(k) not in (None, "") else None
@@ -691,7 +699,7 @@ def model_page(s, sleds):
                                       ("clutching", s["clutch"]), ("overall length", s["length_in"])] if not v]
     plate = "".join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in [
         ("Engine", f"{n(s['cc'])} cc"),
-        ("Power", hp or (hp_gap(s) + (f'<small class="hpc">{HP_CLASS[(str(s["year"]), s["brand"], s["id"])]} hp class</small>' if hp_class_text(s) else ""))),
+        ("Power", hp or (hp_gap(s) + (f'<small class="hpc">{HP_CLASS.get((str(s["year"]), s["brand"], s["id"])) or s.get("_hp_class")} hp class</small>' if hp_class_text(s) else ""))),
         ("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else (wt_gap(s) or "—")),
         ("Track", f"{n(s['track_length_in'])} in" if s["track_length_in"] else "—"),
     ])
