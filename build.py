@@ -689,6 +689,31 @@ def photo_block(s):
             f'<figcaption>{e(p["caption"])}. Photo: <a href="{e(p["page"])}" rel="noopener">{e(p["credit"])}</a>, {e(p["license"])}.</figcaption></figure>')
 
 
+# Sleds whose figures come from press coverage of the maker's launch release (MaxSled, Snow Goer, Supertrax...)
+# rather than a factory document. Shown with a plain label until a factory source replaces it; the label
+# disappears on its own once the source field names a factory spec sheet or manual first.
+PRESS = r"MaxSled|Snow ?Goer|SnoWest|Supertrax|SnowTech|Snowmobile\.com|ArcticInsider|magazine"
+FACTORY_DOC = r"spec(ification)? sheet|owner'?s manual|operator'?s guide|service manual|shop manual|factory scan|heritage collection"
+
+
+def press_sourced(s):
+    src = s.get("source") or ""
+    m = re.search(PRESS, src, re.I)
+    if not m:
+        return False
+    if re.search(r"as published by|launch materials|lineup coverage", src, re.I):
+        return True
+    f = re.search(FACTORY_DOC, src, re.I)
+    return not (f and f.start() < m.start())
+
+
+def press_note(s):
+    if not press_sourced(s):
+        return ""
+    return (f'<p class="pressnote">These figures come from launch coverage of {e(s["brand"])}\'s factory release, as printed by '
+            f'snowmobile magazines. They haven\'t been checked against a factory spec sheet or owner\'s manual yet.</p>')
+
+
 def model_page(s, sleds):
     def row(k, v):
         return f"<tr><th scope=row>{k}</th><td>{v}</td></tr>" if v not in (None, "", "—") else ""
@@ -775,6 +800,7 @@ def model_page(s, sleds):
     <p class="kicker"><a href="/snowmobiles/{s['brand_slug']}/">{e(s['brand'])}</a> / <a href="/snowmobiles/type/{slug(s['category'])}/">{e(s['category'])}</a></p>
     <h1 class="h1">{e(nm)} specs</h1>
     <p class="lede">{summary(s, nm)}</p>
+    {press_note(s)}
     {note}
   </header>
   <dl class="plate">{plate}</dl>

@@ -89,6 +89,9 @@ def audit(rows, only=None):
         other = sorted({int(m) for m in re.findall(r"\bMY ?(\d{4})\b", src + " " + note)} - {int(y)}) if y.isdigit() else []
         if other and not re.search(rf"\bMY ?{y}\b|\b{y}\b", src):
             out["CHECK"].append((lab, f"source mentions model year {other} but not {y}"))
+        # press-sourced figures: allowed, but labelled on the site until a factory document replaces them
+        if re.search(r"as published by|launch materials|lineup coverage", src, re.I):
+            out["TIDY"].append((lab, "figures from magazine launch coverage; replace with a factory spec sheet or manual when found"))
         # values
         for f, (lo, hi) in RANGE.items():
             v = num(r.get(f))

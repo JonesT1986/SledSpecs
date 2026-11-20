@@ -283,3 +283,4 @@ table{border-collapse:collapse;width:100%}
 .sledphoto{margin:18px 0}
 .sledphoto img{width:100%;max-height:440px;object-fit:cover;border-radius:var(--r);display:block;background:#dbe3e9}
 .sledphoto figcaption{font-size:.82rem;color:var(--slate);margin-top:6px}
+.pressnote{margin:10px 0 0;padding:10px 14px;border-left:4px solid #e0a400;background:#fff8e1;color:#4a3b00;font-size:.92rem;max-width:70ch}
