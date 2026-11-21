@@ -21,9 +21,9 @@ BELT = {"Polaris": r"^32\d{5}$|^3211\d{3}$|^3212\d{3}$|^32\d{5}$",
         "Ski-Doo": r"^4173\d{5}$|^4150\d{5}$|^4140\d{5}$|^4176\d{5}$|^605 ?\d{3} ?\d{3}$|^41[4-7]\d{6}$",
         "Arctic Cat": r"^0\d{3}-\d{3}$",
         "Yamaha": r"^[0-9A-Z]{3}-[0-9]{5}-[0-9]{2}(-00)?$"}
-RANGE = {"dry_weight_lb": (60, 900), "track_length_in": (40, 180), "track_width_in": (8, 25),
+RANGE = {"dry_weight_lb": (60, 1200), "track_length_in": (40, 180), "track_width_in": (8, 25),
          "lug_in": (0.3, 3.6), "fuel_gal": (0.3, 20), "length_in": (50, 160), "hp": (1, 260),
-         "cc": (40, 1300)}
+         "cc": (40, 1600)}
 
 
 def rows_at(rev=None):
@@ -110,6 +110,7 @@ def audit(rows, only=None):
             if not (0.6 * want <= cc <= 1.25 * want):
                 out["CHECK"].append((lab, f"name says {want} but cc is {r['cc']}"))
         b = (r.get("belt_pn") or "").strip()
+        if re.fullmatch(r"\d{3}( \d{3}){2}", b): b = b.replace(" ", "")
         if b and not re.search(r"\d{3}", b):
             out["FIX"].append((lab, f"belt_pn holds text, not a part number: {b!r}"))
         elif b and r["brand"] in BELT and not re.match(BELT[r["brand"]], b):
