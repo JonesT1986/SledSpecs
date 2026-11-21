@@ -796,7 +796,7 @@ def mods_section(s):
                  + (f' <span class="mchecked">(checked {news_date(x["checked"])})</span>' if x.get("checked") else "") + "</li>"
                  for x in d["not_listed"])
     return (f'<section class="mods" id="mods"><h2>Mods for the {e(s["year"])} {e(s["brand"])} {e(s["model"])}</h2>'
-            '<p class="modnote">Fitment is shown in each maker's own words. Every power, weight and '
+            '<p class="modnote">Fitment is shown in each maker\'s own words. Every power, weight and '
             'performance figure below is the kit maker\'s own claim. SledSpecs hasn\'t tested these kits.</p>'
             + body
             + (f'<h3>Checked and not listed</h3><p class="small">We checked these makers\' own sites and they don\'t list a kit for this exact sled.</p><ul class="notlisted">{nl}</ul>' if nl else "")
