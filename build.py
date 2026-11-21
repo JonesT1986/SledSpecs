@@ -819,19 +819,6 @@ def model_page(s, sleds):
              ("Dry weight", f"{n(s['dry_weight_lb'])} lb" if s["dry_weight_lb"] else None), ("Track", s["track"]),
              ("Fuel capacity", f"{n(s['fuel_gal'])} US gal" if s["fuel_gal"] else None),
              ("Drive belt part number", s["belt_pn"]), ("Category", s["category"])]
-    veh = {"@type": "Vehicle", "@id": SITE + s["url"] + "#sled", "name": nm, "url": SITE + s["url"],
-           "brand": {"@type": "Brand", "name": s["brand"]}, "model": s["model"], "vehicleModelDate": str(s["year"]),
-           "category": f"{s['category']} snowmobile", "image": SITE + "/assets/og.jpg",
-           "vehicleEngine": {"@type": "EngineSpecification", "name": s["engine"],
-                             "engineDisplacement": {"@type": "QuantitativeValue", "value": s["cc"], "unitCode": "CMQ"}},
-           "additionalProperty": [{"@type": "PropertyValue", "name": k, "value": v} for k, v in props if v]}
-    if s["hp"]:
-        veh["vehicleEngine"]["enginePower"] = {"@type": "QuantitativeValue", "value": s["hp"], "unitCode": "BHP"}
-    if s["dry_weight_lb"]:
-        veh["weightTotal"] = {"@type": "QuantitativeValue", "value": s["dry_weight_lb"], "unitCode": "LBR"}
-    if s["fuel_gal"]:
-        veh["fuelCapacity"] = {"@type": "QuantitativeValue", "value": s["fuel_gal"], "unitCode": "GLL"}
-
     bits = [f"{n(s['cc'])} cc {s['engine']}"]
     if hp: bits.append(hp)
     if s["dry_weight_lb"]: bits.append(f"{n(s['dry_weight_lb'])} lb dry")
@@ -841,7 +828,8 @@ def model_page(s, sleds):
     title_bits = "HP, Weight, Track" + (" & Belt" if s["belt_pn"] else "")
     return page(s["url"], fit_title(f"{nm} Specs: {title_bits} | SledSpecs", f"{nm} Specs: {title_bits}",
                                      f"{nm} Specs: HP, Weight, Track", f"{nm} Specs and Weight", f"{nm} Specs"), desc, body,
-                jsonld=graph(ORG, c_ld, veh, faq_ld), active="brands")
+                jsonld=graph(ORG, c_ld, {"@type": "WebPage", "@id": SITE + s["url"], "url": SITE + s["url"], "name": f"{nm} specs",
+                                         "description": desc, "about": {"@type": "Thing", "name": nm}}, faq_ld), active="brands")
 
 
 def belt_page(sleds):
