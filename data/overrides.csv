@@ -1,3 +1,58 @@
+year,brand,id,field,value,reason
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,length_in,125,2026 polaris.com spec page
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,lug_in,1.6,2026 polaris.com spec page
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,track_name,Cobra,2026 polaris.com spec page
+2026,Polaris,voyageur-sp-650-voyageur-sp-146,notes,"Dry weight 472 lb, 11.5 gal, 125 in long and 15 x 146 x 1.6 Cobra track confirmed on the 2026 polaris.com spec page for the 650 Voyageur SP 146.",verified 2026-11-19
+2026,Polaris,voyageur-550-voyageur-144,notes,"Listed for MY2026 in the 2026 550 PRO-RIDE Owner's Manual (publications.polaris.com). Dry weight not yet confirmed for 2026, so left blank.",verified 2026-11-19
+2026,Polaris,switchback-xc-850-switchback-xc-146,dry_weight_lb,,497 lb only confirmed for 2027
+2026,Polaris,switchback-xc-850-switchback-xc-146,lug_in,1.352,Polaris-fed 2026 dealer spec data
+2026,Polaris,switchback-xc-850-switchback-xc-146,track_name,Cobra,Polaris-fed 2026 dealer spec data
+2026,Polaris,switchback-xc-850-switchback-xc-146,notes,"2026 track (15 x 146 x 1.352 Cobra) and 125 in length from Polaris-fed 2026 dealer spec data. Dry weight left blank: 497 lb appears only on the 2027 page, not confirmed for 2026.",verified 2026-11-19
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,length_in,,"copied from 2025, not confirmed for 2026"
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,lug_in,1.35,Polaris-fed 2026 dealer spec data
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,track_name,Cobra,Polaris-fed 2026 dealer spec data
+2026,Polaris,indy-adventure-prostar-s4-indy-adventure-137,notes,"2026 dry weight 636 lb and 15 x 137 x 1.35 Cobra track from Polaris-fed 2026 dealer spec data (2026 polaris.com spec page exists). Overall length not confirmed for 2026, left blank.",verified 2026-11-19
+2026,Polaris,rmk-khaos-850-rmk-khaos-146,length_in,122.8,Polaris-fed 2026 dealer spec data
+2026,Polaris,rmk-khaos-850-rmk-khaos-146,notes,"2026 dry weight 426 lb and 122.8 in length from Polaris-fed 2026 dealer spec data, matching the 850 RMK owner's manual (Khaos 146/155: 426 lb). The original DX1 brochure link now returns 404.",verified 2026-11-19
+2026,Arctic Cat,riot-9000-atac-eps-es,track_name,,copied from prior year
+1994,Yamaha,vmax-4-800-st,belt_pn,,"field held text, not a part number"
+2019,Yamaha,srviper-l-tx,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-l-tx-dx,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-l-tx-se,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-l-tx-le,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-r-tx-dx,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-r-tx-se,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-x-tx-se-141,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-b-tx-le,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-s-tx-dx-137,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-s-tx-dx-146,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-m-tx-se-153,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2017,Yamaha,srviper-m-tx-se-162,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2022,Arctic Cat,zr-9000-thundercat-137-qs3,belt_pn,0627-112,2022 Arctic Cat ZR 9000 Service Manual (P/N 2263-296) Drive System Specifications table
+2022,Arctic Cat,zr-9000-thundercat-137-qs3-eps,belt_pn,0627-112,2022 Arctic Cat ZR 9000 Service Manual (P/N 2263-296) Drive System Specifications table
+2022,Arctic Cat,zr-9000-thundercat-137-atac-eps-2022,belt_pn,0627-112,2022 Arctic Cat ZR 9000 Service Manual (P/N 2263-296) Drive System Specifications table
+2022,Arctic Cat,zr-6000-137-es-ltd-qs3,belt_pn,0627-107,"2022 Arctic Cat OEM parts fiche, DRIVE CLUTCH [109593] item 15 (model S2022ZXDKEUSO)"
+2022,Arctic Cat,zr-6000-137-es-rr,belt_pn,0627-107,"2022 Arctic Cat OEM parts fiche, DRIVE CLUTCH [110102] item 17 (model S2022ZXDKRUSG)"
+2022,Arctic Cat,riot-6000-146-es,belt_pn,0627-107,"2022 Arctic Cat OEM parts fiche, DRIVE CLUTCH [109593] item 15 (model S2022RTDLPUSG)"
+2022,Arctic Cat,norseman-x-8000-2022,belt_pn,0627-111,"2022 Arctic Cat OEM parts fiche, DRIVE CLUTCH [109431] item 17 (model S2022BCHLDEUR)"
+2022,Arctic Cat,blast-zr-4000-2022,belt_pn,0823-683,"2022 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2022JABKTUSL)"
+2022,Arctic Cat,blast-m-4000-2022,belt_pn,0823-683,"2022 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2022JABA1EUR)"
+2022,Arctic Cat,blast-lt-4000-2022,belt_pn,0823-683,"2022 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2022JABKTEUR)"
+2022,Arctic Cat,blast-xr-4000-2022,belt_pn,0823-683,"2022 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2022JABLOUSB)"
+2022,Arctic Cat,blast-xr-touring-4000-2022,belt_pn,0823-683,"2022 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2022JABTOUSB)"
+2022,Arctic Cat,zr-200-2022,belt_pn,0627-106,"2022 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [107960] item 19 (model S2022ZRAACUSG)"
+2023,Arctic Cat,zr-6000-137-es-qs3,belt_pn,0627-107,"2023 Arctic Cat OEM parts fiche, DRIVE CLUTCH [110047] item 15 (model S2023ZXDLEUSG)"
+2023,Arctic Cat,zr-6000-r-xc-129-es,belt_pn,0627-107,"2023 Arctic Cat OEM parts fiche, DRIVE CLUTCH [110028] item 15 (model S2023ACDREUSB)"
+2023,Arctic Cat,riot-9000-146-atac-eps,belt_pn,0627-112,"2023 Arctic Cat OEM parts fiche, DRIVE CLUTCH [109604] item 16 (model S2023RTXTQUSG)"
+2023,Arctic Cat,zr-9000-thundercat-137-atac-eps,belt_pn,0627-112,"2023 Arctic Cat OEM parts fiche, DRIVE CLUTCH [109604] item 16 (model S2023ZXXTQUSB)"
+2023,Arctic Cat,blast-zr-4000,belt_pn,0823-683,"2023 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2023JABSTUSG)"
+2023,Arctic Cat,blast-m-4000,belt_pn,0823-683,"2023 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2023JABA1USL)"
+2023,Arctic Cat,blast-m-ltd-4000,belt_pn,0823-683,"2023 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2023JABA2USO)"
+2023,Arctic Cat,blast-lt-4000,belt_pn,0823-683,"2023 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2023JABUTUSB)"
+2023,Arctic Cat,blast-xr-4000,belt_pn,0823-683,"2023 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2023JABLOUSB)"
+2023,Arctic Cat,blast-xr-touring-4000,belt_pn,0823-683,"2023 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [108699] item 20 (model S2023JABTOUSB)"
+2023,Arctic Cat,norseman-x-8000,belt_pn,0627-111,"2023 Arctic Cat OEM parts fiche, DRIVE CLUTCH [109879] item 15 (model S2023BCHLDEUR)"
+2023,Arctic Cat,zr-200,belt_pn,0627-106,"2023 Arctic Cat OEM parts fiche, CLUTCH ASSEMBLIES [107960] item 19 (model S2023ZRAABUSG)"
 2021,Arctic Cat,m-8000-hardcore-alpha-one-154-2-6-2021,belt_pn,0627-111,"2021 Arctic Cat 6000/8000 service manual (P/N 2263-103), Drive System Specifications table"
 2021,Arctic Cat,riot-6000-146-es-ifp-1-6,belt_pn,0627-107,"2021 Arctic Cat 6000/8000 service manual (P/N 2263-103), Drive System Specifications table"
 2021,Arctic Cat,riot-8000-146-es-ifp-1-6,belt_pn,0627-111,"2021 Arctic Cat 6000/8000 service manual (P/N 2263-103), Drive System Specifications table"
@@ -50,3 +105,48 @@
 2020,Arctic Cat,zr-8000-limited-iact-es-137,belt_pn,0627-111,"2020 Arctic Cat ZR/Riot/M/Norseman X 6000/8000 service manual (P/N 2262-817), Drive System Specifications table"
 2020,Arctic Cat,zr-8000-rr-es-137,belt_pn,0627-111,"2020 Arctic Cat ZR/Riot/M/Norseman X 6000/8000 service manual (P/N 2262-817), Drive System Specifications table"
 2020,Arctic Cat,zr-8000-sno-pro-es-137,belt_pn,0627-111,"2020 Arctic Cat ZR/Riot/M/Norseman X 6000/8000 service manual (P/N 2262-817), Drive System Specifications table"
+2018,Arctic Cat,zr-6000-sno-pro-es-129,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-sno-pro-es-137,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-sno-pro-es-129,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-sno-pro-es-137,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-limited-es-129,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-limited-es-137,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-el-tigre-es-129,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-el-tigre-es-137,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-rr-es-137,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-es-129,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-6000-es-137,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,zr-7000-129,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,zr-7000-137,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,zr-7000-limited-137,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,zr-7000-sno-pro-129,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,zr-7000-sno-pro-137,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-es-129,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-es-137,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-el-tigre-es-129,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-el-tigre-es-137,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-limited-es-129,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-limited-es-137,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-rr-es-129,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,zr-8000-rr-es-137,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,xf-8000-cross-country-limited-es-137,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,xf-7000-crosstour-146,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,xf-6000-crosstrek-es-137,belt_pn,0627-107,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-107 - fitment list names this 2018 model
+2018,Arctic Cat,xf-7000-crosstrek-137,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,xf-8000-crosstrek-es-137,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,xf-8000-high-country-limited-es-141,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,xf-8000-high-country-limited-es-153,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-se-153,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-se-es-153,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-sno-pro-153-2-6,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-sno-pro-153-3-0,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-sno-pro-162-3-0,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-sno-pro-es-153-2-6,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-sno-pro-es-153-3-0,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-sno-pro-es-162-3-0,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-mountain-cat-153,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-mountain-cat-162,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-mountain-cat-es-153,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,m-8000-mountain-cat-es-162,belt_pn,0627-111,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-111 - fitment list names this 2018 model
+2018,Arctic Cat,pantera-7000,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
+2018,Arctic Cat,pantera-7000-limited,belt_pn,0627-110,Arctic Cat OEM parts fiche (Brown's Leisure World) part-usage lookup for 0627-110 - fitment list names this 2018 model
