@@ -28,3 +28,6 @@ year,brand,id,field,value,reason
 2017,Yamaha,srviper-s-tx-dx-146,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
 2017,Yamaha,srviper-m-tx-se-153,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
 2017,Yamaha,srviper-m-tx-se-162,hp,,"Yamaha's 125 is a horsepower class, not a rated figure"
+2022,Arctic Cat,zr-9000-thundercat-137-qs3,belt_pn,0627-112,2022 Arctic Cat ZR 9000 Service Manual (P/N 2263-296) Drive System Specifications table
+2022,Arctic Cat,zr-9000-thundercat-137-qs3-eps,belt_pn,0627-112,2022 Arctic Cat ZR 9000 Service Manual (P/N 2263-296) Drive System Specifications table
+2022,Arctic Cat,zr-9000-thundercat-137-atac-eps-2022,belt_pn,0627-112,2022 Arctic Cat ZR 9000 Service Manual (P/N 2263-296) Drive System Specifications table
