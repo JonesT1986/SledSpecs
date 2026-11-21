@@ -284,3 +284,23 @@ table{border-collapse:collapse;width:100%}
 .sledphoto img{width:100%;max-height:440px;object-fit:cover;border-radius:var(--r);display:block;background:#dbe3e9}
 .sledphoto figcaption{font-size:.82rem;color:var(--slate);margin-top:6px}
 .pressnote{margin:10px 0 0;padding:10px 14px;border-left:4px solid #e0a400;background:#fff8e1;color:#4a3b00;font-size:.92rem;max-width:70ch}
+
+/* mods section */
+.mods{margin:28px 0}
+.mods h3{margin:22px 0 8px}
+.modnote{padding:10px 14px;background:#eef3f7;border-left:4px solid var(--navy);max-width:72ch}
+.modlist{list-style:none;margin:0;padding:0}
+.mod{padding:14px 0;border-bottom:1px solid #dbe3e9}
+.mhead a{font-weight:700;font-size:1.05rem}
+.msku{font-size:.82rem;color:var(--slate);margin-left:6px}
+.mprice{display:block;font-size:.9rem;color:var(--slate);margin-top:2px}
+.mfit{margin:8px 0;max-width:72ch}
+.mclaims,.mreq{margin:6px 0 6px 18px;padding:0}
+.mclaims .tag{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 6px;border-radius:4px;background:#fff1ea;color:#9a3412;margin-right:4px}
+.mreqlabel{margin:8px 0 2px;font-weight:600}
+.mimpact{margin:10px 0 0;padding:10px 14px;background:#f3f8f2;border-left:4px solid #3f8f3a;max-width:72ch}
+.mimpact b{display:block;margin-bottom:2px}
+.mimpact p{margin:0}
+.mchecked{font-size:.82rem;color:var(--slate)}
+.notlisted{margin:6px 0 0 18px;padding:0}
+.modjump{margin:8px 0 0}

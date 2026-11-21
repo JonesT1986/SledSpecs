@@ -714,6 +714,95 @@ def press_note(s):
             f'snowmobile magazines. They haven\'t been checked against a factory spec sheet or owner\'s manual yet.</p>')
 
 
+# ---------- performance mods (data/mods/*.json, researched by Clove) ----------
+# Each file holds one sled object or a list of them:
+#   {"sled_id": "ski-doo/2023-summit-x-850-e-tec-165", "mods": [...], "not_listed": [...]}
+# sled_id is the sled page's address after /snowmobiles/. Shown only for sleds that have data.
+# Every figure is the kit maker's own claim; the impact note is SledSpecs editorial. TODO phase 2: /mods/ hub page.
+MOD_CATS = ["Clutch kits", "Exhaust cans", "Full exhaust / stage kits", "Turbo kits", "Big bore kits", "Other"]
+MOD_CAT_ALIASES = {"clutch": "Clutch kits", "clutch kit": "Clutch kits", "exhaust can": "Exhaust cans", "can": "Exhaust cans",
+                   "full exhaust": "Full exhaust / stage kits", "stage kit": "Full exhaust / stage kits",
+                   "turbo": "Turbo kits", "turbo kit": "Turbo kits", "big bore": "Big bore kits", "big bore kit": "Big bore kits"}
+
+
+def mod_cat(c):
+    c = (c or "").strip()
+    for k in MOD_CATS:
+        if c.lower() == k.lower():
+            return k
+    return MOD_CAT_ALIASES.get(c.lower(), "Other")
+
+
+def load_mods():
+    out = {}
+    folder = os.path.join(ROOT, "data", "mods")
+    if not os.path.isdir(folder):
+        return out
+    for fn in sorted(os.listdir(folder)):
+        if not fn.endswith(".json"):
+            continue
+        with open(os.path.join(folder, fn), encoding="utf-8") as fh:
+            data = json.load(fh)
+        for item in (data if isinstance(data, list) else [data]):
+            sid = item.get("sled_id", "").strip().strip("/")
+            if not sid:
+                continue
+            slot = out.setdefault(sid, {"mods": [], "not_listed": []})
+            slot["mods"] += item.get("mods", [])
+            slot["not_listed"] += item.get("not_listed", [])
+    return out
+
+
+MODS = load_mods()
+
+
+def money(m):
+    p, cur = m.get("price"), (m.get("currency") or "").upper()
+    if p in (None, ""):
+        return ""
+    try:
+        amt = f"{float(p):,.2f}".replace(".00", "")
+    except (TypeError, ValueError):
+        amt = str(p)
+    sym = {"USD": "US$", "CAD": "CA$", "EUR": "€"}.get(cur, (cur + " ") if cur else "")
+    when = f", checked {news_date(m['price_checked'])}" if m.get("price_checked") else ""
+    return f'<span class="mprice">{sym}{e(amt)}{when}</span>'
+
+
+def mod_entry(m):
+    claims = "".join(f"<li><span class=\"tag\">Maker claim</span> {e(c)}</li>" for c in m.get("claims") or [])
+    reqs = "".join(f"<li>{e(r)}</li>" for r in m.get("requirements") or [])
+    sku = f' <span class="msku">SKU {e(m["sku"])}</span>' if m.get("sku") else ""
+    return (f'<li class="mod"><div class="mhead"><a href="{e(m["source_url"])}" rel="nofollow noopener" target="_blank">'
+            f'{e(m.get("maker", ""))} {e(m.get("product_name", ""))}</a>{sku}{money(m)}</div>'
+            + (f'<p class="mfit"><b>{e(m.get("maker", "The maker"))} lists fitment as:</b> “{e(m["fitment_statement"])}”</p>' if m.get("fitment_statement") else "")
+            + (f'<ul class="mclaims">{claims}</ul>' if claims else "")
+            + (f'<p class="mreqlabel">{e(m.get("maker", "The maker"))} says it also needs:</p><ul class="mreq">{reqs}</ul>' if reqs else "")
+            + (f'<div class="mimpact"><b>What this does to your sled (SledSpecs note)</b><p>{e(m["impact_note"])}</p></div>' if m.get("impact_note") else "")
+            + (f'<p class="mchecked">Fitment checked on the maker\'s site {news_date(m["checked"])}.</p>' if m.get("checked") else "")
+            + "</li>")
+
+
+def mods_section(s):
+    sid = s["url"].split("/snowmobiles/", 1)[1].strip("/")
+    d = MODS.get(sid)
+    if not d or not (d["mods"] or d["not_listed"]):
+        return ""
+    groups = collections.OrderedDict((c, []) for c in MOD_CATS)
+    for m in d["mods"]:
+        groups[mod_cat(m.get("category"))].append(m)
+    body = "".join(f'<h3>{e(c)}</h3><ul class="modlist">{"".join(mod_entry(m) for m in ms)}</ul>' for c, ms in groups.items() if ms)
+    nl = "".join(f'<li><b>{e(x.get("maker", ""))}</b>: {e(x.get("reason", ""))}'
+                 + (f' <span class="mchecked">(checked {news_date(x["checked"])})</span>' if x.get("checked") else "") + "</li>"
+                 for x in d["not_listed"])
+    return (f'<section class="mods" id="mods"><h2>Mods for the {e(s["year"])} {e(s["brand"])} {e(s["model"])}</h2>'
+            '<p class="modnote">Fitment is shown in each maker's own words. Every power, weight and '
+            'performance figure below is the kit maker\'s own claim. SledSpecs hasn\'t tested these kits.</p>'
+            + body
+            + (f'<h3>Checked and not listed</h3><p class="small">We checked these makers\' own sites and they don\'t list a kit for this exact sled.</p><ul class="notlisted">{nl}</ul>' if nl else "")
+            + "</section>")
+
+
 def model_page(s, sleds):
     def row(k, v):
         return f"<tr><th scope=row>{k}</th><td>{v}</td></tr>" if v not in (None, "", "—") else ""
@@ -802,6 +891,7 @@ def model_page(s, sleds):
     <p class="lede">{summary(s, nm)}</p>
     {press_note(s)}
     {note}
+    {'<p class="modjump"><a href="#mods">Mods for this sled</a></p>' if mods_section(s) else ''}
   </header>
   <dl class="plate">{plate}</dl>
   {photo_block(s)}
@@ -811,6 +901,7 @@ def model_page(s, sleds):
     </div>
     <aside class="side">{side}</aside>
   </div>
+  {mods_section(s)}
   {parts_box(s)}
   {faq}
 </article>"""
