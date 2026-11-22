@@ -686,3 +686,64 @@ year,brand,id,field,value,reason
 2024,Arctic Cat,zr-8000-rr-es,belt_pn,0627-111,"Arctic Cat OEM parts fiche (Country Cat) - ZR 8000 RR ES 137 GREEN [S2024ZXHRRUSG] DRIVE CLUTCH lists Belt, Drive 0627-111"
 2024,Arctic Cat,zr-9000-rr-eps-es,belt_pn,0627-112,"Arctic Cat OEM parts fiche (Country Cat) - ZR 9000 137 RR EPS GREEN [S2024ZXXRRUSG] DRIVE CLUTCH lists Belt, Drive 0627-112"
 2024,Arctic Cat,zr-9000-thundercat-atac-eps-es,belt_pn,0627-112,"Arctic Cat OEM parts fiche (Country Cat) - ZR 9000 THUNDERCAT 137 ATAC EPS GREEN [S2024ZXXTQUSG] DRIVE CLUTCH lists Belt, Drive 0627-112"
+2020,Ski-Doo,backcountry-600r-e-tec-146-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 BACKCOUNTRY 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,backcountry-850-e-tec-146-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 BACKCOUNTRY 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,backcountry-x-850-e-tec-146-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 BACKCOUNTRY 850 ETEC X Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,backcountry-x-rs-850-e-tec-146-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 BACKCOUNTRY 850 ETEC XRS Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,backcountry-x-rs-850-e-tec-154-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 BACKCOUNTRY 850 ETEC XRS Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,freeride-850-e-tec-137,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 FREERIDE 850 137 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,freeride-850-e-tec-146-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 FREERIDE 850 146 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,freeride-850-e-tec-154-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 FREERIDE 850 154 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,freeride-850-e-tec-165-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 FREERIDE 850 165 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-sp-600r-e-tec-146-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,summit-sp-600r-e-tec-154-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,summit-sp-850-e-tec-146-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT SP 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-sp-850-e-tec-154-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT SP 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-sp-850-e-tec-165-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT SP 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-sp-850-e-tec-175-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT SP 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-x-850-e-tec-154-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT X 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-x-850-e-tec-165-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT X 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-x-850-e-tec-175,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT X 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-x-with-expert-package-850-e-tec-154-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT X EXPERT 850 154 Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,summit-x-with-expert-package-850-e-tec-165-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 SUMMIT X EXPERT 850 165 Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,mxz-sport-600-carb-120,belt_pn,417300197,BRP OEM parts catalogue (Partzilla fiche) - 2020 MXZ 600 CARB Pulley system diagram lists drive belt 417300197
+2020,Ski-Doo,mxz-tnt-600r-e-tec-129-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 MXZ TNT 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,mxz-tnt-850-e-tec-129-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 MXZ TNT 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,mxz-x-600r-e-tec-129-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 MXZ X 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,mxz-x-850-e-tec-129-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 MXZ X 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,mxz-x-rs-600r-e-tec-129-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 MXZ XRS 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,mxz-x-rs-850-e-tec-129-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 MXZ XRS 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,renegade-adrenaline-600r-e-tec-137-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 600R ETEC ADRENALINE X Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,renegade-adrenaline-850-e-tec-137-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 850 ETEC ADRENALINE Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,renegade-adrenaline-900-ace-137-2020,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 900 ACE Pulley system diagram lists drive belt 417300383
+2020,Ski-Doo,renegade-adrenaline-900-ace-turbo-137-2020,belt_pn,417300531,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 900 ACE TURBO - ADRENALINE Pulley system diagram lists drive belt 417300531
+2020,Ski-Doo,renegade-enduro-600r-e-tec-137-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 600R ETEC ENDURO Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,renegade-enduro-850-e-tec-137-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 850 ETEC ENDURO Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,renegade-enduro-900-ace-137-2020,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 900 ACE Pulley system diagram lists drive belt 417300383
+2020,Ski-Doo,renegade-enduro-900-ace-turbo-137-2020,belt_pn,417300531,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 900 ACE TURBO - ENDURO Pulley system diagram lists drive belt 417300531
+2020,Ski-Doo,renegade-x-600r-e-tec-137-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 600R ETEC ADRENALINE X Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,renegade-x-850-e-tec-137-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE X 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,renegade-x-900-ace-turbo-137-2020,belt_pn,417300531,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE X 900 ACE TURBO Pulley system diagram lists drive belt 417300531
+2020,Ski-Doo,renegade-x-rs-850-e-tec-137-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE XRS 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,renegade-x-rs-900-ace-turbo-137-2020,belt_pn,417300531,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE XRS 900 ACE TURBO Pulley system diagram lists drive belt 417300531
+2020,Ski-Doo,expedition-le-600r-e-tec-154-x-20-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION LE 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,expedition-le-900-ace-154-x-20-2020,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION LE 900 ACE Pulley system diagram lists drive belt 417300383
+2020,Ski-Doo,expedition-le-900-ace-turbo-154-x-20-2020,belt_pn,417300531,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION LE 900 ACE TURBO Pulley system diagram lists drive belt 417300531
+2020,Ski-Doo,expedition-se-600r-e-tec-154-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION SE 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,expedition-se-900-ace-154-2020,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION SE 900 ACE Pulley system diagram lists drive belt 417300383
+2020,Ski-Doo,expedition-se-900-ace-turbo-154-2020,belt_pn,417300531,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION SE 900 ACE TURBO Pulley system diagram lists drive belt 417300531
+2020,Ski-Doo,expedition-sport-550-fan-154,belt_pn,417300127,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION SPORT 550F Pulley system diagram lists drive belt 417300127
+2020,Ski-Doo,expedition-sport-600-ace-154-2020,belt_pn,417300127,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION SPORT 600 ACE Pulley system diagram lists drive belt 417300127
+2020,Ski-Doo,expedition-sport-900-ace-154-2020,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION SPORT 900 ACE Pulley system diagram lists drive belt 417300383
+2020,Ski-Doo,expedition-xtreme-850-e-tec-154-2020,belt_pn,417300571,BRP OEM parts catalogue (Partzilla fiche) - 2020 EXPEDITION XTREME 850 ETEC Pulley system diagram lists drive belt 417300571
+2020,Ski-Doo,grand-touring-limited-600r-e-tec-137-2020,belt_pn,417300551,BRP OEM parts catalogue (Partzilla fiche) - 2020 GRAND TOURING 600R ETEC Pulley system diagram lists drive belt 417300551
+2020,Ski-Doo,grand-touring-limited-900-ace-137-2020,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 GRAND TOURING 900 ACE Pulley system diagram lists drive belt 417300383
+2020,Ski-Doo,grand-touring-limited-900-ace-turbo-137-2020,belt_pn,417300558,BRP OEM parts catalogue (Partzilla fiche) - 2020 GRAND TOURING 900 ACE TURBO Pulley system diagram lists drive belt 417300558
+2020,Ski-Doo,grand-touring-sport-600-ace-137-2020,belt_pn,417300127,BRP OEM parts catalogue (Partzilla fiche) - 2020 GRAND TOURING 600 ACE Pulley system diagram lists drive belt 417300127
+2020,Ski-Doo,grand-touring-sport-900-ace-137-2020,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 GRAND TOURING 900 ACE Pulley system diagram lists drive belt 417300383
+2020,Ski-Doo,renegade-sport-600-carb-137,belt_pn,417300197,BRP OEM parts catalogue (Partzilla fiche) - 2020 RENEGADE 600 CARB Pulley system diagram lists drive belt 417300197
+2020,Ski-Doo,tundra-lt-550-fan-154,belt_pn,417300127,BRP OEM parts catalogue (Partzilla fiche) - 2020 TUNDRA 550F Pulley system diagram lists drive belt 417300127
+2020,Ski-Doo,tundra-lt-600-ace-154-2020,belt_pn,417300127,BRP OEM parts catalogue (Partzilla fiche) - 2020 TUNDRA 600 ACE Pulley system diagram lists drive belt 417300127
+2020,Ski-Doo,tundra-sport-550-fan-137,belt_pn,417300127,BRP OEM parts catalogue (Partzilla fiche) - 2020 TUNDRA 550F Pulley system diagram lists drive belt 417300127
+2020,Ski-Doo,tundra-sport-600-ace-137,belt_pn,417300127,BRP OEM parts catalogue (Partzilla fiche) - 2020 TUNDRA 600 ACE Pulley system diagram lists drive belt 417300127
+2020,Ski-Doo,tundra-xtreme-600-h-o-e-tec-154,belt_pn,417300383,BRP OEM parts catalogue (Partzilla fiche) - 2020 TUNDRA 600 HO ETEC Pulley system diagram lists drive belt 417300383
