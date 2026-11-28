@@ -425,7 +425,7 @@ def cat_table(sleds, caption, filters=True, table_id="cat"):
                                            n(s["track_length_in"]) or "", s["belt_pn"] or ""]).lower()
         rows.append(f"""<tr data-brand="{e(s['brand'])}" data-type="{e(s['category'])}" data-year="{s['year']}" data-cc="{s['cc'] or 0}" data-hp="{s['hp'] or 0}" data-weight="{s['dry_weight_lb'] or 0}" data-track="{s['track_length_in'] or 0}" data-lbhp="{s['lb_per_hp'] or 0}" data-search="{e(search)}">
 <th scope="row" class="m"><a href="{s['url']}">{e(s['year'])} {e(s['brand'])} {e(s['model'])}</a><span class="t">{e(s['category'])}</span></th>
-<td class="cc" data-l="Engine"><b>{n(s['cc'])} cc</b><span>{e(s['engine'])}</span></td>
+<td class="cc" data-l="Engine"><b>{(n(s['cc']) + ' cc') if s['cc'] else '—'}</b><span>{e(s['engine'])}</span></td>
 <td class="hp" data-l="Power">{hp}</td>
 <td class="wt" data-l="Dry weight">{(n(s['dry_weight_lb'])+' lb') if s['dry_weight_lb'] else '—'}</td>
 <td class="tr" data-l="Track">{e(s['track'] or '—')}</td>
@@ -570,10 +570,43 @@ def brand_page(brand, sleds):
     types = sorted({s["category"] for s in ss}, key=TYPES.index)
     intro = (f"{len(ss)} {brand} {'sled' if len(ss) == 1 else 'sleds'} from {yr}, covering "
              f"{', '.join(t.lower() for t in types)} models. Open any sled for its full spec sheet, belt number and source.")
+    intro += "</p>" + year_nav(brand, ss) + "<p class=\"lede\">Or filter the full list below."
     return listing_page(f"/snowmobiles/{slug(brand)}/", f"{brand} snowmobile specs", intro, ss,
                         f"{brand} Snowmobile Specs ({yr}) | SledSpecs",
                         f"{brand} snowmobile specifications {yr}: horsepower, dry weight, track size, fuel capacity and drive belt numbers for {len(ss)} models.",
                         [("Home", "/"), ("Snowmobiles", "/snowmobiles/"), (brand, f"/snowmobiles/{slug(brand)}/")], "brands")
+
+
+def year_url(brand_slug, year):
+    return f"/snowmobiles/{brand_slug}/{year}/"
+
+
+def year_nav(brand, ss, current=None):
+    """Links to every model year a brand has, newest first: the short path from brand to model."""
+    bslug = slug(brand)
+    years = sorted({x["year"] for x in ss}, reverse=True)
+    li = "".join(f'<li aria-current="page"><b>{y}</b></li>' if y == current else
+                 f'<li><a href="{year_url(bslug, y)}" title="{sum(1 for x in ss if x["year"] == y)} sleds">{y}</a></li>' for y in years)
+    return f'<nav class="years" aria-label="{e(brand)} model years"><h2>{e(brand)} sleds by year</h2><ul class="yearlist">{li}</ul></nav>'
+
+
+def year_page(brand, year, sleds):
+    ss = [s for s in sleds if s["brand"] == brand]
+    yy = sorted((s for s in ss if s["year"] == year), key=lambda s: (s["category"], s["model"]))
+    bslug = slug(brand)
+    types = sorted({s["category"] for s in yy}, key=TYPES.index)
+    h1 = f"{year} {brand} snowmobile specs"
+    intro = (f"Every {year} {brand} sled we have on file: {len(yy)} {'model' if len(yy) == 1 else 'models'} "
+             f"({', '.join(t.lower() for t in types)}). Open any sled for its full spec sheet, belt number and source.")
+    path = year_url(bslug, year)
+    c_html, c_ld = crumbs([("Home", "/"), ("Snowmobiles", "/snowmobiles/"), (brand, f"/snowmobiles/{bslug}/"), (str(year), path)])
+    body = f"""{c_html}
+<section class="block"><h1 class="h1">{e(h1)}</h1><p class="lede">{intro}</p>
+{cat_table(yy, "Factory figures.", filters=False, table_id="cat")}
+{year_nav(brand, ss, current=year)}</section>"""
+    return page(path, f"{year} {brand} Snowmobile Specs: All {len(yy)} Models | SledSpecs",
+                f"{year} {brand} snowmobile specifications for {len(yy)} models: horsepower, dry weight, track size, fuel capacity and drive belt numbers.",
+                body, jsonld=graph(ORG, c_ld, itemlist(yy, h1)), active="brands")
 
 
 def type_page(t, sleds):
@@ -858,6 +891,11 @@ def model_page(s, sleds):
     if related:
         side += '<div class="rel"><h2>Similar sleds</h2><ul>' + "".join(
             f'<li><a href="{x["url"]}">{e(x["full"])}</a></li>' for x in related) + "</ul></div>"
+    same_year = [x for x in sleds if x["brand"] == s["brand"] and x["year"] == s["year"] and x["key"] != s["key"] and x not in related]
+    if same_year:
+        side += (f'<div class="rel"><h2>Other {s["year"]} {e(s["brand"])} sleds</h2><ul>' + "".join(
+            f'<li><a href="{x["url"]}">{e(x["model"])}</a></li>' for x in sorted(same_year, key=lambda x: x["model"])[:12]) + "</ul>" +
+            f'<p class="small"><a href="{year_url(s["brand_slug"], s["year"])}">All {s["year"]} {e(s["brand"])} sleds</a></p></div>')
 
     nm = f"{s['year']} {s['brand']} {s['model']}"
     qas = [(f"How much horsepower does the {nm} have?",
@@ -876,7 +914,8 @@ def model_page(s, sleds):
         qas.append((f"How big is the fuel tank on the {nm}?", f"{n(s['fuel_gal'])} US gallons ({round(s['fuel_gal'] * 3.785, 1)} L)."))
     faq, faq_ld = faq_block(qas, "Quick answers")
 
-    c_html, c_ld = crumbs([("Home", "/"), ("Snowmobiles", "/snowmobiles/"), (s["brand"], f"/snowmobiles/{s['brand_slug']}/"), (f"{s['year']} {s['model']}", s["url"])])
+    c_html, c_ld = crumbs([("Home", "/"), ("Snowmobiles", "/snowmobiles/"), (s["brand"], f"/snowmobiles/{s['brand_slug']}/"),
+                           (str(s["year"]), year_url(s["brand_slug"], s["year"])), (s["model"], s["url"])])
     src = (f"<p><b>Source:</b> {e(s['source'])}. Checked {e(s['checked'] or '')}.</p>" if s["source"]
            else "<p><b>Source:</b> being confirmed.</p>")
     gaps = (f"<p>Not on file yet for this sled: {', '.join(missing)}."
@@ -886,7 +925,7 @@ def model_page(s, sleds):
     body = f"""{c_html}
 <article class="model">
   <header class="model-h">
-    <p class="kicker"><a href="/snowmobiles/{s['brand_slug']}/">{e(s['brand'])}</a> / <a href="/snowmobiles/type/{slug(s['category'])}/">{e(s['category'])}</a></p>
+    <p class="kicker"><a href="/snowmobiles/{s['brand_slug']}/">{e(s['brand'])}</a> / <a href="{year_url(s['brand_slug'], s['year'])}">{s['year']}</a> / <a href="/snowmobiles/type/{slug(s['category'])}/">{e(s['category'])}</a></p>
     <h1 class="h1">{e(nm)} specs</h1>
     <p class="lede">{summary(s, nm)}</p>
     {press_note(s)}
@@ -1241,6 +1280,8 @@ def main():
     for b in BRANDS:
         if any(s["brand"] == b for s in sleds):
             write(f"/snowmobiles/{slug(b)}/", brand_page(b, sleds)); urls.append((f"/snowmobiles/{slug(b)}/", TODAY))
+            for y in sorted({s["year"] for s in sleds if s["brand"] == b}):
+                write(year_url(slug(b), y), year_page(b, y, sleds)); urls.append((year_url(slug(b), y), TODAY))
     for t in TYPES:
         if any(s["category"] == t for s in sleds):
             write(f"/snowmobiles/type/{slug(t)}/", type_page(t, sleds)); urls.append((f"/snowmobiles/type/{slug(t)}/", TODAY))
