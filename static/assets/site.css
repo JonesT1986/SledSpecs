@@ -308,9 +308,8 @@ table{border-collapse:collapse;width:100%}
 .years{margin:18px 0 8px}
 .years h2{margin:0 0 10px}
 .yearlist{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-.yearlist li{border:1px solid var(--line);border-radius:6px;background:#fff}
-.yearlist a,.yearlist b{display:block;padding:6px 11px;font-weight:700;color:var(--ink);text-decoration:none}
-.yearlist a:hover{color:var(--orange-ink)}
-.yearlist span{display:none}
-.yearlist li[aria-current]{background:var(--ink)}
-.yearlist li[aria-current] b{color:#fff}
+.yearlist li{border:2px solid #0a1f32;border-radius:6px;background:#fff}
+.yearlist a,.yearlist b{display:block;padding:6px 11px;font-weight:800;font-size:1rem;color:#0a1f32 !important;text-decoration:none;opacity:1}
+.yearlist a:hover{background:#0a1f32;color:#fff !important}
+.yearlist li[aria-current]{background:#0a1f32}
+.yearlist li[aria-current] b{color:#fff !important}
